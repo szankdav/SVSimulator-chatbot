@@ -7,7 +7,13 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 // Új kliens létrehozása
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
+  ],
+});
 client.cooldowns = new Collection();
 
 client.commands = new Collection();
