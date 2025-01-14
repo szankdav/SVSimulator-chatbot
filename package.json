@@ -2,8 +2,9 @@
   "name": "discord-chatbot",
   "version": "1.0.0",
   "description": "Chatbot for a discord server",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
+    "dev": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -13,6 +14,7 @@
     "eslint": "^9.18.0"
   },
   "dependencies": {
+    "discord.js": "^14.17.3",
     "dotenv": "^16.4.7"
   }
 }
