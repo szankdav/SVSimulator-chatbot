@@ -14,9 +14,12 @@ const client = new Client({
     GatewayIntentBits.MessageContent,
   ],
 });
+// Cooldowns szótár létrehozása
 client.cooldowns = new Collection();
 
+// Commands szótár létrehozása
 client.commands = new Collection();
+// Commands-ok betöltése
 const foldersPath = path.join(__dirname, "commands");
 const commandFolders = fs.readdirSync(foldersPath);
 
@@ -39,6 +42,7 @@ for (const folder of commandFolders) {
   }
 }
 
+// Events-ek betöltése
 const eventsPath = path.join(__dirname, "events");
 const eventFiles = fs
   .readdirSync(eventsPath)
