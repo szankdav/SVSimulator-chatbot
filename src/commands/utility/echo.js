@@ -13,14 +13,13 @@ module.exports = {
       option
         .setName("input")
         .setDescription("The input to echo back")
-        // Ensure the text will fit in an embed description, if the user chooses that option
         .setMaxLength(2_000)
     )
     .addChannelOption((option) =>
       option
         .setName("channel")
         .setDescription("The channel to echo into")
-        // Ensure the user can only select a TextChannel for output
+        // Csak TextChannel lehet az output
         .addChannelTypes(ChannelType.GuildText)
     )
     .addBooleanOption((option) =>
