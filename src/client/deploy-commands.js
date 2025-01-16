@@ -7,7 +7,7 @@ dotenv.config();
 
 const commands = [];
 // Minden command fájl behívása
-const foldersPath = path.join(__dirname, "commands");
+const foldersPath = path.join(__dirname, "../commands");
 const commandFolders = fs.readdirSync(foldersPath);
 
 for (const folder of commandFolders) {
@@ -34,23 +34,28 @@ for (const folder of commandFolders) {
 const rest = new REST().setToken(process.env.DISCORD_TOKEN);
 
 // A parancsok indítása
-(async () => {
-  try {
-    console.log(
-      `Started refreshing ${commands.length} application (/) commands.`
-    );
+module.exports = {
+  deployCommands: async () => {
+    try {
+      console.log(
+        `Started refreshing ${commands.length} application (/) commands.`
+      );
 
-    // A PUT metódussal minden parancs frissítése
-    const data = await rest.put(
-      Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),
-      { body: commands }
-    );
+      // A PUT metódussal minden parancs frissítése
+      const data = await rest.put(
+        Routes.applicationGuildCommands(
+          process.env.CLIENT_ID,
+          process.env.GUILD_ID
+        ),
+        { body: commands }
+      );
 
-    console.log(
-      `Successfully reloaded ${data.length} application (/) commands.`
-    );
-  } catch (error) {
-    // Hiba logolása
-    console.error(error);
-  }
-})();
+      console.log(
+        `Successfully reloaded ${data.length} application (/) commands.`
+      );
+    } catch (error) {
+      // Hiba logolása
+      console.error(error);
+    }
+  },
+};
