@@ -1,13 +1,16 @@
-const { SlashCommandBuilder, ChannelType, MessageFlags, PermissionFlagsBits } = require("discord.js");
+const {
+  SlashCommandBuilder,
+  ChannelType,
+  MessageFlags,
+  PermissionFlagsBits,
+} = require("discord.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("echo")
     .setDescription("Replies with your input!")
-    .addUserOption(option =>
-			option
-				.setName('target')
-				.setDescription('The text that writed')
+    .addUserOption((option) =>
+      option.setName("user").setDescription("The text that writed")
     )
     .addStringOption((option) =>
       option
@@ -28,15 +31,20 @@ module.exports = {
         .setDescription("Whether or not the echo should be embedded")
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
-	async execute(interaction) {
-    const name = interaction.options.getString('input') ?? 'Nem adott meg nevet.';
-    const embedded = interaction.options.getBoolean('embed') ?? false;
-    const target = interaction.options.getUser('target');
-    if(embedded){
-      await interaction.reply({ content: `A megadott név: ${name}`, flags: MessageFlags.Ephemeral });
+  async execute(interaction) {
+    const name =
+      interaction.options.getString("input") ?? "Nem adott meg nevet.";
+    const embedded = interaction.options.getBoolean("embed") ?? false;
+    const user = interaction.member.user;
+    if (!embedded) {
+      await interaction.reply(
+        `A megadott név: ${name}, aki beíirta: ${user.username}`
+      );
+    } else {
+      await interaction.reply({
+        content: `A megadott név: ${name}`,
+        flags: MessageFlags.Ephemeral,
+      });
     }
-    else{
-      await interaction.reply(`A megadott név: ${name}, aki beíirta: ${target.username}`);
-    }
-	},
+  },
 };
