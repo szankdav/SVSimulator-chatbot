@@ -38,7 +38,7 @@ module.exports = {
     const user = interaction.member.user;
     if (!embedded) {
       await interaction.reply(
-        `A megadott név: ${name}, aki beíirta: ${user.username}`
+        `A megadott név: ${name}, aki beírta: ${user.username}`
       );
     } else {
       await interaction.reply({
