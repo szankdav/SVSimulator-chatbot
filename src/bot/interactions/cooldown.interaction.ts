@@ -17,7 +17,7 @@ export function cooldownForInteraction(interaction: Interaction<CacheType>) {
 
   const now = Date.now();
   const timestamps: Collection<string, number> = cooldowns.get(command)!;
-  const defaultCooldownDuration = 3;
+  const defaultCooldownDuration = 5;
   const cooldownAmount = defaultCooldownDuration * 1000;
 
   if (timestamps.has(interaction.user.id)) {

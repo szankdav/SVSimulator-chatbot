@@ -1,7 +1,8 @@
 import { Client } from "discord.js";
 import { config } from "../../../config";
 import { deployCommands } from "./deploy-commands";
-import { cooldownForInteraction } from "../events/interactionCreate";
+import { cooldownForInteraction } from "../interactions/cooldown.interaction";
+import { createMessage, answerBotMention } from "../events/messageCreate.event"
 
 const client = new Client({
   intents: ["Guilds", "GuildMessages", "DirectMessages", "MessageContent"],
@@ -18,7 +19,8 @@ client.on("interactionCreate", async (interaction) => {
 
 client.on("messageCreate", async (message) => {
   if (message.author.bot) return;
-  console.log(message.content);
+  await createMessage(message);
+  await answerBotMention(message);
 })
 
 export function startClient() {
