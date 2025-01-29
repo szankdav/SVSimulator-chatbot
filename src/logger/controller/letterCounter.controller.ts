@@ -1,50 +1,54 @@
+import { Database } from "sqlite3";
 import { createLetterCounters, updateLetterCounter, getFirstLetterCounterAuthorByAuthor, getAllLetterCounters, getAllLetterCountersAuthors, LetterModel } from "../model/letterCounter.model";
 import { MessageModel } from "../model/message.model";
 import { SqlParams } from "../types/sqlparams.type";
+import { DatabaseError } from "../middleware/databaseError.handler";
 
-export const createLetterCountersController = async (messageParams: MessageModel): Promise<void> => {
+export const createLetterCountersController = async (db: Database, messageParams: MessageModel): Promise<void> => {
     try {
-        const existingAuthor = await checkAuthorExistense([messageParams.author]);
+        const existingAuthor = await checkAuthorExistense(db, [messageParams.author]);
         if (!existingAuthor)
-            await createLetterCounters([messageParams.author, "", 0, messageParams.messageCreatedAt, new Date().toLocaleString()]);
-        await letterIterator(messageParams);
+            await createLetterCounters(db, [messageParams.author, "", 0, messageParams.messageCreatedAt, new Date().toLocaleString()]);
+        await letterIterator(db, messageParams);
     } catch (error) {
         console.error("Error creating letters:", error);
+        throw new DatabaseError("Error creating letters", 500);
     }
 };
 
-export const getAllLetterCountersController = async (): Promise<LetterModel[]> => {
+export const getAllLetterCountersController = async (db: Database): Promise<LetterModel[]> => {
     try {
-        return await getAllLetterCounters();
+        return await getAllLetterCounters(db);
     } catch (error) {
         console.error("Error fetching all letters:", error);
-        return [];
+        throw new DatabaseError("Error fetching all letters:", 500);
     }
 };
 
-export const getAllLetterCountersAuthorsController = async (): Promise<{ author: string }[]> => {
+export const getAllLetterCountersAuthorsController = async (db: Database): Promise<{ author: string }[]> => {
     try {
-        return await getAllLetterCountersAuthors();
+        return await getAllLetterCountersAuthors(db);
     } catch (error) {
         console.error("Error fetching all authors:", error);
-        return [];
+        throw new DatabaseError("Error fetching all authors", 500);
     }
 }
 
-const checkAuthorExistense = async (params: SqlParams): Promise<{ author: string } | undefined> => {
+const checkAuthorExistense = async (db: Database, params: SqlParams): Promise<{ author: string } | undefined> => {
     try {
-        return await getFirstLetterCounterAuthorByAuthor(params);
+        return await getFirstLetterCounterAuthorByAuthor(db, params);
     } catch (error) {
         console.error("Error fetching first author:", error);
+        throw new DatabaseError("Error fetching first author", 500);
     }
 };
 
-const letterIterator = async (messageParams: MessageModel): Promise<void> => {
+const letterIterator = async (db: Database, messageParams: MessageModel): Promise<void> => {
     const validLetters = messageParams.content
         .toLowerCase()
         .split("")
         .filter((char) => /^[a-záéíóöőúüű]$/i.test(char));
     for (let letter of validLetters) {
-        await updateLetterCounter([messageParams.author, letter]);
+        await updateLetterCounter(db, [messageParams.author, letter]);
     }
 };

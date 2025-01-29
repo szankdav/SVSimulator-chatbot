@@ -1,9 +1,10 @@
 import { beforeEach, vi, describe, it, expect, afterEach } from "vitest";
 import * as letterCounterController from "./letterCounter.controller.ts";
 import * as letterCounterModel from "../model/letterCounter.model.ts";
-import { createTables } from "../database/database.ts";
+import { createTables } from "../database/tables.ts";
 import sqlite3, { Database } from "sqlite3";
 import { MessageModel } from "../model/message.model.ts";
+import { DatabaseError } from "../middleware/databaseError.handler.ts";
 
 let db: Database;
 
@@ -11,135 +12,88 @@ describe("letterController tests", () => {
     beforeEach(async () => {
         vi.clearAllMocks();
         db = new sqlite3.Database(":memory:");
-        await createTables();
+        await createTables(db);
+        vi.spyOn(console, 'error').mockImplementation(() => { });
     });
 
     afterEach(() => {
         db.close();
+        vi.restoreAllMocks();
     });
 
-    it("should insert a new author when createLetterCountersController is called", async () => {
-        const messageParams: MessageModel = { id: 0, author: "author1", content: "message", messageCreatedAt: new Date().toLocaleString() };
-        vi.spyOn(letterCounterController, 'createLetterCountersController');
+    describe("createLetterCountersController tests", () => {
+        it("should create new letterCounters for the author", async () => {
+            const createdAtTime = new Date().toLocaleString()
+            const messageParams: MessageModel = { id: 0, author: "author1", content: "message", messageCreatedAt: createdAtTime };
+            vi.spyOn(letterCounterController, 'createLetterCountersController');
+            vi.spyOn(letterCounterModel, 'createLetterCounters');
 
-        await letterCounterController.createLetterCountersController(messageParams);
-        expect(letterCounterController.createLetterCountersController).toHaveBeenCalledWith(messageParams);
-    });
+            await letterCounterController.createLetterCountersController(db, messageParams);
+            expect(letterCounterModel.createLetterCounters).toHaveBeenCalledWith(db, ["author1", "z", 0, createdAtTime, createdAtTime]);
+        });
 
-    it("should update letterCounters when createLetterCountersController is called with existing author", async () => {
-        const messageParams: MessageModel = { id: 0, author: "author1", content: "message", messageCreatedAt: new Date().toLocaleString() };
+        it("should update letterCounters when createLetterCountersController is called with existing author", async () => {
+            const messageParams: MessageModel = { id: 0, author: "author1", content: "message", messageCreatedAt: new Date().toLocaleString() };
 
-        vi.spyOn(letterCounterModel, 'getFirstLetterCounterAuthorByAuthor').mockResolvedValue(messageParams);
-        vi.spyOn(letterCounterModel, 'createLetterCounters');
-        vi.spyOn(letterCounterModel, 'updateLetterCounter');
+            vi.spyOn(letterCounterModel, 'getFirstLetterCounterAuthorByAuthor').mockResolvedValue(messageParams);
+            vi.spyOn(letterCounterModel, 'createLetterCounters');
+            vi.spyOn(letterCounterModel, 'updateLetterCounter');
 
-        await letterCounterController.createLetterCountersController(messageParams);
+            await letterCounterController.createLetterCountersController(db, messageParams);
 
-        expect(letterCounterModel.createLetterCounters).not.toHaveBeenCalled();
-        expect(letterCounterModel.updateLetterCounter).toHaveBeenCalledTimes(messageParams.content.length);
-    });
+            expect(letterCounterModel.createLetterCounters).not.toHaveBeenCalled();
+            expect(letterCounterModel.updateLetterCounter).toHaveBeenCalledTimes(messageParams.content.length);
+        });
 
-    it("should throw an error with the correct message", async () => {
-        const messageParams: MessageModel = { id: 0, author: "author1", content: "message", messageCreatedAt: new Date().toLocaleString() };
-        const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => { });
-        vi.spyOn(letterCounterModel, 'getFirstLetterCounterAuthorByAuthor').mockResolvedValue(undefined);
-        vi.spyOn(letterCounterModel, 'createLetterCounters').mockRejectedValue(new Error("Database error..."));
+        it("should throw an error with the correct message", async () => {
+            const messageParams: MessageModel = { id: 0, author: "author1", content: "message", messageCreatedAt: new Date().toLocaleString() };
+            vi.spyOn(letterCounterModel, 'getFirstLetterCounterAuthorByAuthor').mockResolvedValue(undefined);
+            vi.spyOn(letterCounterModel, 'createLetterCounters').mockRejectedValue(new Error("Error creating letters"));
 
-        await letterCounterController.createLetterCountersController(messageParams);
-
-        expect(consoleSpy).toHaveBeenCalledWith("Error creating letters:", Error("Database error..."));
-        consoleSpy.mockRestore();
+            await expect(letterCounterController.createLetterCountersController(db, messageParams)).rejects.toThrow(DatabaseError);
+            await expect(letterCounterController.createLetterCountersController(db, messageParams)).rejects.toThrow("Error creating letters");
+        })
     })
 
+    describe("getAllLetterCountersController tests", () => {
+        it("should return with all the letterCounters", async () => {
+            const testMessageParams1: MessageModel = { id: 0, author: "author1", content: "message", messageCreatedAt: new Date().toLocaleString() };
+            const testMessageParams2: MessageModel = { id: 0, author: "author2", content: "message", messageCreatedAt: new Date().toLocaleString() };
 
+            await letterCounterController.createLetterCountersController(db, testMessageParams1);
+            await letterCounterController.createLetterCountersController(db, testMessageParams2);
+            const result = await letterCounterController.getAllLetterCountersController(db);
 
-    //     it("should skip invalid characters in the message", async () => {
-    //     const params = ["author1", "me$$sage123!@", new Date()];
+            expect(result[0].author).toBe(testMessageParams1.author);
+            expect(result[35].author).toBe(testMessageParams2.author);
+        })
 
-    //     await letterCounterController(params);
+        it("should throw an error with the correct message", async () => {
+            vi.spyOn(letterCounterModel, 'getAllLetterCounters').mockRejectedValue(new Error("Error fetching all letters"));
 
-    //     expect(insertLetters).toHaveBeenCalledWith([
-    //       params[0],
-    //       '',
-    //       0,
-    //       params[2],
-    //       params[2],
-    //     ]);
+            await expect(letterCounterController.getAllLetterCountersController(db)).rejects.toThrow(DatabaseError);
+            await expect(letterCounterController.getAllLetterCountersController(db)).rejects.toThrow("Error fetching all letters");
+        })
+    })
 
-    //     const validLetterCount = params[1]
-    //       .toLowerCase()
-    //       .split("")
-    //       .filter((char) => /^[a-záéíóöőúüű]$/i.test(char)).length;
+    describe("getAllLetterCountersAuthorsController", () => {
+        it("should return with all authors", async () => {
+            const testMessageParams1: MessageModel = { id: 0, author: "author1", content: "message", messageCreatedAt: new Date().toLocaleString() };
+            const testMessageParams2: MessageModel = { id: 0, author: "author2", content: "message", messageCreatedAt: new Date().toLocaleString() };
 
-    //     expect(updateLetterCount).toHaveBeenCalledTimes(validLetterCount);
-    //   });
+            await letterCounterController.createLetterCountersController(db, testMessageParams1);
+            await letterCounterController.createLetterCountersController(db, testMessageParams2);
+            const result = await letterCounterController.getAllLetterCountersAuthorsController(db);
 
-    //   it("should handle empty messages without throwing errors", async () => {
-    //     const params = ["author1", "", new Date()];
+            expect(result[0].author).toBe(testMessageParams1.author);
+            expect(result[1].author).toBe(testMessageParams2.author);
+        })
 
-    //     await letterCounterController(params);
+        it("should throw an error with the correct message", async () => {
+            vi.spyOn(letterCounterModel, 'getAllLetterCountersAuthors').mockRejectedValue(new Error("Error fetching all authors"));
 
-    //     expect(insertLetters).toHaveBeenCalledWith([
-    //       params[0],
-    //       '',
-    //       0,
-    //       params[2],
-    //       params[2],
-    //     ]);
-
-    //     expect(updateLetterCount).not.toHaveBeenCalled();
-    //   });
-
-    //   it("should log errors if `getFirstAuthorByAuthor` fails", async () => {
-    //     const params = ["author1", "message", new Date()];
-    //     const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
-
-    //     getFirstAuthorByAuthor.mockRejectedValueOnce(new Error("Database error"));
-
-    //     await letterCounterController(params);
-
-    //     expect(consoleSpy).toHaveBeenCalledWith(expect.any(Error));
-    //     consoleSpy.mockRestore();
-    //     getFirstAuthorByAuthor.mockRestore();
-    //   });
-
-    //   it("should log errors if `insertLetters` fails", async () => {
-    //     const params = ["author1", "message", new Date()];
-    //     const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
-
-    //     insertLetters.mockRejectedValueOnce(new Error("Insert error"));
-
-    //     await letterCounterController(params);
-
-    //     expect(consoleSpy).toHaveBeenCalledWith(expect.any(Error));
-    //     consoleSpy.mockRestore();
-    //   });
-
-    //   it("should log errors if `updateLetterCount` fails", async () => {
-    //     const params = ["author1", "message", new Date()];
-    //     const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
-
-    //     updateLetterCount.mockRejectedValueOnce(new Error("Update error"));
-
-    //     await letterCounterController(params);
-
-    //     expect(consoleSpy).toHaveBeenCalledWith(expect.any(Error));
-    //     consoleSpy.mockRestore();
-    //   });
-
-    //   it("should handle a single-character message", async () => {
-    //     const params = ["author1", "A", new Date()];
-
-    //     await letterCounterController(params);
-
-    //     expect(insertLetters).toHaveBeenCalledWith([
-    //       params[0],
-    //       '',
-    //       0,
-    //       params[2],
-    //       params[2],
-    //     ]);
-
-    //     expect(updateLetterCount).toHaveBeenCalledTimes(1);
-    //   });
+            await expect(letterCounterController.getAllLetterCountersAuthorsController(db)).rejects.toThrow(DatabaseError);
+            await expect(letterCounterController.getAllLetterCountersAuthorsController(db)).rejects.toThrow("Error fetching all authors");
+        })
+    })
 });

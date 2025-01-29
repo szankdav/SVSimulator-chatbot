@@ -1,8 +1,8 @@
-import { Events, Message, OmitPartialGroupDMChannel } from "discord.js";
+import { Message, OmitPartialGroupDMChannel } from "discord.js";
 import { createMessageController } from "../../logger/controller/message.controller";
 import { MessageModel } from "../../logger/model/message.model";
+import { db } from "../../logger/database/database";
 
-export const name = Events.MessageCreate;
 export async function createMessage(message: OmitPartialGroupDMChannel<Message<boolean>>) {
   try {
     if (message.author.bot) return;
@@ -13,7 +13,7 @@ export async function createMessage(message: OmitPartialGroupDMChannel<Message<b
       content: message.content,
       messageCreatedAt: message.createdAt.toLocaleString(),
     };
-    await createMessageController(messageToCreate);
+    await createMessageController(db, messageToCreate);
   } catch (error) {
     console.error("Error creating message:", error);
   }
@@ -25,6 +25,6 @@ export async function answerBotMention(message: OmitPartialGroupDMChannel<Messag
 
   if (message.mentions.users.has("1328702124413943830")) {
     message.channel.send(`Szia ${message.author}!`);
-    message.channel.send(`Az elérhető parancsaimat a / jellel tudod előhozni! :)`);
+    message.channel.send(`Az elérhető parancsaimat a "/" jellel tudod előhozni! :)`);
   }
 }

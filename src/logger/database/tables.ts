@@ -32,3 +32,12 @@ export const createLettersTable = async (db: Database): Promise<void> => {
         console.error("Error creating Letters table:", error);
     }
 };
+
+export const createTables = async (db: Database): Promise<void> => {
+    try {
+        await createMessagesTable(db);
+        await createLettersTable(db);
+    } catch (error) {
+        console.error("Error creating tables:", error);
+    }
+};

@@ -1,5 +1,6 @@
-import { db, execute, fetchAll, fetchFirst } from "../database/database.js";
-import { paramaterValidator, SqlParams } from "../types/sqlparams.type.js";
+import { Database } from "sqlite3";
+import { execute, fetchAll, fetchFirst } from "../database/database.js";
+import { SqlParams } from "../types/sqlparams.type.js";
 
 export type LetterModel = {
     id: number;
@@ -10,25 +11,27 @@ export type LetterModel = {
     updatedAt: Date;
 }
 
-export const updateLetterCounter = async (params: SqlParams): Promise<void> => {
+export const updateLetterCounter = async (db: Database, params: SqlParams): Promise<void> => {
     const sql = `UPDATE Letters SET count = count + 1 WHERE author = ? AND letter = ?`;
     try {
         await execute(db, sql, params);
     } catch (error) {
         console.error("Error updating letter count:", error);
+        throw new Error("Error updating letter count");
     }
 };
 
-export const getFirstLetterCounterAuthorByAuthor = async (params: SqlParams): Promise<{ author: string } | undefined> => {
+export const getFirstLetterCounterAuthorByAuthor = async (db: Database, params: SqlParams): Promise<{ author: string } | undefined> => {
     const sql = `SELECT author FROM Letters WHERE author = ?`;
     try {
         return await fetchFirst<{ author: string }>(db, sql, params);
     } catch (error) {
         console.error("Error fetching first author:", error);
+        throw new Error("Error fetching first author");
     }
 };
 
-export const getAllLetterCounters = async (): Promise<LetterModel[]> => {
+export const getAllLetterCounters = async (db: Database): Promise<LetterModel[]> => {
     const sql = `SELECT * FROM Letters`;
     try {
         const rows = await fetchAll<{
@@ -50,21 +53,21 @@ export const getAllLetterCounters = async (): Promise<LetterModel[]> => {
         }));
     } catch (error) {
         console.error("Error fetching all letters:", error);
-        return [];
+        throw new Error("Error fetching all letters");
     }
 };
 
-export const getAllLetterCountersAuthors = async (): Promise<{ author: string }[]> => {
+export const getAllLetterCountersAuthors = async (db: Database): Promise<{ author: string }[]> => {
     const sql = `SELECT author FROM Letters GROUP BY author`;
     try {
         return await fetchAll<{ author: string }>(db, sql);
     } catch (error) {
         console.error("Error fetching all authors:", error);
-        return [];
+        throw new Error("Error fetching all authors");
     }
 };
 
-export const createLetterCounters = async (params: SqlParams): Promise<void> => {
+export const createLetterCounters = async (db: Database, params: SqlParams): Promise<void> => {
     const alphabet: string[] = [
         "a",
         "á",
@@ -116,7 +119,8 @@ export const createLetterCounters = async (params: SqlParams): Promise<void> => 
             });
         });
     } catch (error) {
-        console.error("Error inserting letters:", error);
+        console.error("Error creating letters:", error);
+        throw new Error("Error creating letters");
     }
 };
 
