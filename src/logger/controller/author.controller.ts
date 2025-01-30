@@ -7,9 +7,10 @@ export const createAuthorController = async (db: Database, authorParams: AuthorM
     try {
         const params: SqlParams = [authorParams.name, authorParams.createdAt];
         const existingAuthor = await getAuthorByName(db, [authorParams.name]);
-        if (!existingAuthor) 
+        if (!existingAuthor) {
             await createAuthor(db, params);
-        console.log('Author added to the database!');
+            console.log('Author added to the database!');
+        }
     } catch (error) {
         console.error("Error creating author:", error);
         throw new DatabaseError("Error creating author", 500);
