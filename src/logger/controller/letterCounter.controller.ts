@@ -1,14 +1,14 @@
 import { Database } from "sqlite3";
-import { createLetterCounters, updateLetterCounter, getFirstLetterCounterAuthorByAuthor, getAllLetterCounters, getAllLetterCountersAuthors, LetterModel } from "../model/letterCounter.model";
+import { createLetterCounters, updateLetterCounter, getLetterCounterByAuthorId, getAllLetterCounters, getAllLetterCountersAuthors, LetterModel } from "../model/letterCounter.model";
 import { MessageModel } from "../model/message.model";
 import { SqlParams } from "../types/sqlparams.type";
 import { DatabaseError } from "../middleware/databaseError.handler";
 
 export const createLetterCountersController = async (db: Database, messageParams: MessageModel): Promise<void> => {
     try {
-        const existingAuthor = await checkAuthorExistense(db, [messageParams.author]);
-        if (!existingAuthor)
-            await createLetterCounters(db, [messageParams.author, "", 0, messageParams.messageCreatedAt, new Date().toLocaleString()]);
+        const existingAuthorId = await checkAuthorIdExistense(db, [messageParams.authorId]);
+        if (!existingAuthorId)
+            await createLetterCounters(db, [messageParams.authorId, "", 0, messageParams.messageCreatedAt, new Date().toLocaleString()]);
         await letterIterator(db, messageParams);
     } catch (error) {
         console.error("Error creating letters:", error);
@@ -34,9 +34,9 @@ export const getAllLetterCountersAuthorsController = async (db: Database): Promi
     }
 }
 
-const checkAuthorExistense = async (db: Database, params: SqlParams): Promise<{ author: string } | undefined> => {
+const checkAuthorIdExistense = async (db: Database, params: SqlParams): Promise<{ authorId: number } | undefined> => {
     try {
-        return await getFirstLetterCounterAuthorByAuthor(db, params);
+        return await getLetterCounterByAuthorId(db, params);
     } catch (error) {
         console.error("Error fetching first author:", error);
         throw new DatabaseError("Error fetching first author", 500);
@@ -49,6 +49,6 @@ const letterIterator = async (db: Database, messageParams: MessageModel): Promis
         .split("")
         .filter((char) => /^[a-záéíóöőúüű]$/i.test(char));
     for (let letter of validLetters) {
-        await updateLetterCounter(db, [messageParams.author, letter]);
+        await updateLetterCounter(db, [messageParams.authorId, letter]);
     }
 };

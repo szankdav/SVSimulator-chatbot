@@ -7,7 +7,7 @@ import { DatabaseError } from "../middleware/databaseError.handler";
 export const createMessageController = async (db: Database, messageParams: MessageModel): Promise<void> => {
     try {
         // Kell-e vizsgalni arra, hogy a bejovo adat nem ures, ha tudjuk, hogy ilyen nem fordulhat elo?
-        const params: SqlParams = [messageParams.author, messageParams.content, messageParams.messageCreatedAt];
+        const params: SqlParams = [messageParams.authorId, messageParams.content, messageParams.messageCreatedAt];
         await createMessage(db, params);
         await createLetterCountersController(db, messageParams);
         console.log('Message added to the database!');

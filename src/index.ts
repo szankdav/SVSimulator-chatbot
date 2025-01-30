@@ -39,3 +39,15 @@ app.get('/', async (req: Request, res: Response, next: NextFunction) => {
         next(error);
     }
 });
+
+app.get('/authors', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const authorId = req.query.authorId;
+        console.log(authorId)
+        const messages = await getAllMessagesController(db);
+        const authors = await getAllLetterCountersAuthorsController(db);
+        res.render("authors", { messages, authors });
+    } catch (error) {
+
+    }
+})

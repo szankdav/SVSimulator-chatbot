@@ -4,13 +4,13 @@ import { SqlParams } from "../types/sqlparams.type.js";
 
 export type MessageModel = {
     id: number;
-    author: string;
+    authorId: number;
     content: string;
     messageCreatedAt: string;
 };
 
 export const createMessage = async (db: Database, params: SqlParams): Promise<void> => {
-    const sql: string = `INSERT INTO Messages(author, message, createdAt) VALUES (?, ?, ?)`;
+    const sql: string = `INSERT INTO Messages(authorId, message, createdAt) VALUES (?, ?, ?)`;
     try {
         await execute(db, sql, params);
     } catch (error) {
@@ -22,11 +22,11 @@ export const createMessage = async (db: Database, params: SqlParams): Promise<vo
 export const getAllMessages = async (db: Database): Promise<MessageModel[]> => {
     const sql = `SELECT * FROM Messages`;
     try {
-        const rows = await fetchAll<{ id: number; author: string; message: string; createdAt: string }>(db, sql);
+        const rows = await fetchAll<{ id: number; authorId: number; message: string; createdAt: string }>(db, sql);
 
         return rows.map((row) => ({
             id: row.id,
-            author: row.author,
+            authorId: row.authorId,
             content: row.message,
             messageCreatedAt: row.createdAt,
         }));

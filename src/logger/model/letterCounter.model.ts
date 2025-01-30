@@ -4,7 +4,7 @@ import { SqlParams } from "../types/sqlparams.type.js";
 
 export type LetterModel = {
     id: number;
-    author: string;
+    authorId: number;
     letter: string;
     count: number;
     createdAt: Date;
@@ -12,7 +12,7 @@ export type LetterModel = {
 }
 
 export const updateLetterCounter = async (db: Database, params: SqlParams): Promise<void> => {
-    const sql = `UPDATE Letters SET count = count + 1 WHERE author = ? AND letter = ?`;
+    const sql = `UPDATE Letters SET count = count + 1 WHERE authorId = ? AND letter = ?`;
     try {
         await execute(db, sql, params);
     } catch (error) {
@@ -21,13 +21,13 @@ export const updateLetterCounter = async (db: Database, params: SqlParams): Prom
     }
 };
 
-export const getFirstLetterCounterAuthorByAuthor = async (db: Database, params: SqlParams): Promise<{ author: string } | undefined> => {
-    const sql = `SELECT author FROM Letters WHERE author = ?`;
+export const getLetterCounterByAuthorId = async (db: Database, params: SqlParams): Promise<{ authorId: number } | undefined> => {
+    const sql = `SELECT authorId FROM Letters WHERE authorId = ?`;
     try {
-        return await fetchFirst<{ author: string }>(db, sql, params);
+        return await fetchFirst<{ authorId: number }>(db, sql, params);
     } catch (error) {
-        console.error("Error fetching first author:", error);
-        throw new Error("Error fetching first author");
+        console.error("Error fetching authorId:", error);
+        throw new Error("Error fetching authorId");
     }
 };
 
@@ -36,7 +36,7 @@ export const getAllLetterCounters = async (db: Database): Promise<LetterModel[]>
     try {
         const rows = await fetchAll<{
             id: number;
-            author: string;
+            authorId: number;
             letter: string;
             count: number;
             createdAt: string;
@@ -45,7 +45,7 @@ export const getAllLetterCounters = async (db: Database): Promise<LetterModel[]>
 
         return rows.map((row) => ({
             id: row.id,
-            author: row.author,
+            authorId: row.authorId,
             letter: row.letter,
             count: row.count,
             createdAt: new Date(row.createdAt),
@@ -106,7 +106,7 @@ export const createLetterCounters = async (db: Database, params: SqlParams): Pro
         "z",
     ];
 
-    const sql: string = `INSERT INTO Letters (author, letter, count, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)`;
+    const sql: string = `INSERT INTO Letters (authorId, letter, count, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)`;
 
     try {
         return new Promise(async (resolve, reject) => {
