@@ -57,10 +57,10 @@ export const getAllLetterCounters = async (db: Database): Promise<LetterModel[]>
     }
 };
 
-export const getAllLetterCountersAuthors = async (db: Database): Promise<{ author: string }[]> => {
-    const sql = `SELECT author FROM Letters GROUP BY author`;
+export const getAllLetterCountersAuthors = async (db: Database): Promise<{ authorId: number }[]> => {
+    const sql = `SELECT authorId FROM Letters GROUP BY authorId`;
     try {
-        return await fetchAll<{ author: string }>(db, sql);
+        return await fetchAll<{ authorId: number }>(db, sql);
     } catch (error) {
         console.error("Error fetching all authors:", error);
         throw new Error("Error fetching all authors");

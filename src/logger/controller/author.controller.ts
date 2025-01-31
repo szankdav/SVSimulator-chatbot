@@ -1,7 +1,7 @@
 import { Database } from "sqlite3";
 import { SqlParams } from "../types/sqlparams.type";
 import { DatabaseError } from "../middleware/databaseError.handler";
-import { AuthorModel, createAuthor, getAllAuthors, getAuthorByName } from "../model/author.model";
+import { AuthorModel, createAuthor, getAllAuthors, getAuthorById, getAuthorByName } from "../model/author.model";
 
 export const createAuthorController = async (db: Database, authorParams: AuthorModel): Promise<void> => {
     try {
@@ -30,6 +30,16 @@ export const getAuthorByNameController = async (db: Database, name: string): Pro
     try {
         const params: SqlParams = [name];
         return await getAuthorByName(db, params);
+    } catch (error) {
+        console.error("Error fetching author:", error);
+        throw new DatabaseError("Error fetching author", 500);
+    }
+}
+
+export const getAuthorByIdController = async (db: Database, name: string): Promise<AuthorModel | undefined> => {
+    try {
+        const params: SqlParams = [name];
+        return await getAuthorById(db, params);
     } catch (error) {
         console.error("Error fetching author:", error);
         throw new DatabaseError("Error fetching author", 500);

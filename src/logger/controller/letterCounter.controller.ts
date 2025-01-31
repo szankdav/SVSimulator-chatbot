@@ -25,7 +25,7 @@ export const getAllLetterCountersController = async (db: Database): Promise<Lett
     }
 };
 
-export const getAllLetterCountersAuthorsController = async (db: Database): Promise<{ author: string }[]> => {
+export const getAllLetterCountersAuthorsController = async (db: Database): Promise<{ authorId: number }[]> => {
     try {
         return await getAllLetterCountersAuthors(db);
     } catch (error) {

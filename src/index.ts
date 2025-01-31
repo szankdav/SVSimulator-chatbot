@@ -7,6 +7,7 @@ import { getAllMessagesController } from "./logger/controller/message.controller
 import { getAllLetterCountersAuthorsController, getAllLetterCountersController } from "./logger/controller/letterCounter.controller";
 import { db } from "./logger/database/database";
 import { globalErrorHandler } from "./logger/middleware/globalError.handler";
+import { getAllAuthorsController } from "./logger/controller/author.controller";
 
 // Start bot
 startClient();
@@ -42,12 +43,10 @@ app.get('/', async (req: Request, res: Response, next: NextFunction) => {
 
 app.get('/authors', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const authorId = req.query.authorId;
-        console.log(authorId)
         const messages = await getAllMessagesController(db);
-        const authors = await getAllLetterCountersAuthorsController(db);
+        const authors = await getAllAuthorsController(db);
         res.render("authors", { messages, authors });
     } catch (error) {
-
+        next(error);
     }
 })
