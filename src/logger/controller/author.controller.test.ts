@@ -49,12 +49,4 @@ describe('authorController tests', () => {
             await expect(authorController.createAuthorController(db, authorParams)).rejects.toThrow("Error creating author");
         })
     })
-
-    // describe('getAllAuthorsController tests', async () => {
-    //     const authorParams: AuthorModel = { id: 1, name: "Teszt Elek", createdAt: createdAtTime };
-    //     vi.spyOn(authorController, 'createAuthorController');
-
-    //     await authorController.createAuthorController(db, authorParams);
-    //     expect(authorController.createAuthorController).toHaveBeenCalledWith(db, authorParams);
-    // })
 })
