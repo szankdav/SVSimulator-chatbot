@@ -8,6 +8,7 @@ import { getAllLetterCountersAuthorsController, getAllLetterCountersController }
 import { db } from "./logger/database/database";
 import { globalErrorHandler } from "./logger/middleware/globalError.handler";
 import { getAllAuthorsController } from "./logger/controller/author.controller";
+import { createRandomAuthorsInDatabase } from "./logger/database/faker/dataFaker";
 
 // Start bot
 startClient();
@@ -24,6 +25,9 @@ const port = process.env.PORT || 3000;
 
 // Create tables
 await createTables(db);
+
+// Create fake datas for database
+await createRandomAuthorsInDatabase(db);
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
