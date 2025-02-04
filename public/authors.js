@@ -2,8 +2,7 @@
 
 const pageURL = "http://localhost:3000/authors";
 
-const urlParams = new URLSearchParams(window.location.search);
-let authorId = parseInt(urlParams.get("authorId"));
+let authorId = parseInt(window.location.href.split("/").slice(-1));
 const previousButton = document.getElementById("previousButton");
 const nextButton = document.getElementById("nextButton");
 const firstPageNumberButton = document.getElementById("firstPageNumberButton");
@@ -15,21 +14,21 @@ const thirdPageNumberButton = document.getElementById("thirdPageNumberButton");
 const changePageNumbers = () => {
   if (authorId === 1) {
     firstPageNumberButton.innerText = authorId;
-    firstPageNumberButton.href = `${pageURL}?authorId=${firstPageNumberButton.innerText}`;
+    firstPageNumberButton.href = `${pageURL}/${authorId}`;
     secondPageNumberButton.innerText = authorId + 1;
-    secondPageNumberButton.href = `${pageURL}?authorId=${secondPageNumberButton.innerText}`;
+    secondPageNumberButton.href = `${pageURL}/${secondPageNumberButton.innerText}`;
     thirdPageNumberButton.innerText = authorId + 2;
-    thirdPageNumberButton.href = `${pageURL}?authorId=${thirdPageNumberButton.innerText}`;
-    nextButton.href = `${pageURL}?authorId=${thirdPageNumberButton.innerText}`;
+    thirdPageNumberButton.href = `${pageURL}/${thirdPageNumberButton.innerText}`;
+    nextButton.href = `${pageURL}/${authorId + 1}`;
   } else {
     firstPageNumberButton.innerText = authorId - 1;
-    firstPageNumberButton.href = `${pageURL}?authorId=${firstPageNumberButton.innerText}`;
-    previousButton.href = `${pageURL}?authorId=${firstPageNumberButton.innerText}`;
+    firstPageNumberButton.href = `${pageURL}/${authorId - 1}`;
+    previousButton.href = `${pageURL}/${firstPageNumberButton.innerText}`;
     secondPageNumberButton.innerText = authorId;
-    secondPageNumberButton.href = `${pageURL}?authorId=${secondPageNumberButton.innerText}`;
+    secondPageNumberButton.href = `${pageURL}/${secondPageNumberButton.innerText}`;
     thirdPageNumberButton.innerText = authorId + 1;
-    thirdPageNumberButton.href = `${pageURL}?authorId=${thirdPageNumberButton.innerText}`;
-    nextButton.href = `${pageURL}?authorId=${thirdPageNumberButton.innerText}`;
+    thirdPageNumberButton.href = `${pageURL}/${thirdPageNumberButton.innerText}`;
+    nextButton.href = `${pageURL}/${thirdPageNumberButton.innerText}`;
   }
 };
 
@@ -40,17 +39,5 @@ previousButton.addEventListener("click", () => {
 nextButton.addEventListener("click", () => {
   changePageNumbers();
 });
-
-firstPageNumberButton.addEventListener("click", () => {
-    
-})
-
-const names = document.getElementsByClassName("authorName");
-for (let i = 0; i < names.length; i++) {
-  names[i].classList.add("d-none");
-  if (names[i].dataset["authorid"] == authorId) {
-    names[i].classList.remove("d-none");
-  }
-}
 
 changePageNumbers();

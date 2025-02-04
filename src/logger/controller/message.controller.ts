@@ -1,5 +1,5 @@
 import { Database } from "sqlite3";
-import { getAllMessages, createMessage, MessageModel } from "../model/message.model";
+import { getAllMessages, createMessage, MessageModel, getTenMessages } from "../model/message.model";
 import { SqlParams } from "../types/sqlparams.type";
 import { DatabaseError } from "../middleware/databaseError.handler";
 
@@ -21,5 +21,14 @@ export const getAllMessagesController = async (db: Database):Promise<MessageMode
     } catch (error) {
         console.error("Error fetching all messages:", error);
         throw new DatabaseError("Error fetching all messages", 500);
+    }
+}
+
+export const getTenMessagesController = async (db: Database, params: SqlParams):Promise<MessageModel[]> => {
+    try {
+        return await getTenMessages(db, params);
+    } catch (error) {
+        console.error("Error fetching ten messages:", error);
+        throw new DatabaseError("Error fetching ten messages", 500);
     }
 }

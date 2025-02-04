@@ -35,3 +35,20 @@ export const getAllMessages = async (db: Database): Promise<MessageModel[]> => {
         throw new Error("Error fetching all messages");
     }
 };
+
+export const getTenMessages = async (db: Database, params: SqlParams): Promise<MessageModel[]> => {
+    const sql = `SELECT * FROM Messages LIMIT 10 OFFSET ?`;
+    try {
+        const rows = await fetchAll<({ id: number; authorId: number; message: string; createdAt: string })>(db, sql, params);
+
+        return rows.map((row) => ({
+            id: row.id,
+            authorId: row.authorId,
+            content: row.message,
+            messageCreatedAt: row.createdAt,
+        }))
+    } catch (error) {
+        console.error("Error fetching ten messages:", error);
+        throw new Error("Error fetching ten messages");
+    }
+}

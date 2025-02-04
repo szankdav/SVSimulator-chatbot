@@ -9,6 +9,8 @@ import { db } from "./logger/database/database";
 import { globalErrorHandler } from "./logger/middleware/globalError.handler";
 import { getAllAuthorsController } from "./logger/controller/author.controller";
 import { createRandomAuthorsInDatabase } from "./logger/database/faker/dataFaker";
+import { getTenMessages } from "./logger/model/message.model";
+import { getTenAuthors } from "./logger/model/author.model";
 
 // Start bot
 startClient();
@@ -27,7 +29,9 @@ const port = process.env.PORT || 3000;
 await createTables(db);
 
 // Create fake datas for database
-await createRandomAuthorsInDatabase(db);
+if (process.env.NODE_ENV === "devDb") {
+    await createRandomAuthorsInDatabase(db);
+}
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
@@ -45,11 +49,13 @@ app.get('/', async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
-app.get('/authors', async (req: Request, res: Response, next: NextFunction) => {
+app.get('/authors/:page', async (req: Request, res: Response, next: NextFunction) => {
     try {
+        const page = req.params['page'];
+        const authorsSlicedByTen = await getTenAuthors(db, [parseInt(page) == 1 ? 0 : (parseInt(page) - 1) * 10]);
         const messages = await getAllMessagesController(db);
         const authors = await getAllAuthorsController(db);
-        res.render("authors", { messages, authors });
+        res.render("authors", { messages, authorsSlicedByTen });
     } catch (error) {
         next(error);
     }

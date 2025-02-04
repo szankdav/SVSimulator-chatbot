@@ -14,40 +14,38 @@
     <div class="container">
         <div class="row">
             <div class="col-12 d-grid gap-2 d-md-block">
-                <button class="btn btn-success"><a id="previousButton">Previous</a></button>
-                <button class="btn btn-success"><a id="firstPageNumberButton">
-                    </a></button>
-                <button class="btn btn-success"><a id="secondPageNumberButton">
-                    </a></button>
-                <button class="btn btn-success"><a id="thirdPageNumberButton">
-                    </a></button>
-                <button class="btn btn-success"><a id="nextButton">Next</a></button>
+                <a id="previousButton" class="btn btn-success">Previous</a>
+                <a id="firstPageNumberButton" class="btn btn-success"></a>
+                <a id="secondPageNumberButton" class="btn btn-success"></a>
+                <a id="thirdPageNumberButton" class="btn btn-success"></a>
+                <a id="nextButton" class="btn btn-success">Next</a>
             </div>
-            <% authors.forEach(row=> { %>
-                <div class="authorName col-12" data-authorId=<%=row.id%>>
-                    <div>
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <%= row.id %>
-                                    </td>
-                                    <td>
-                                        <%= row.name %>
-                                    </td>
-                                </tr>
-
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <% }) %>
+            <div class="col-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Created</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% authorsSlicedByTen.forEach(row=> { %>
+                            <tr>
+                                <td>
+                                    <%= row.id %>
+                                </td>
+                                <td>
+                                    <%= row.name %>
+                                </td>
+                                <td>
+                                    <%= row.createdAt %>
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

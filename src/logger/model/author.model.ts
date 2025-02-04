@@ -43,3 +43,19 @@ export const getAuthorByName = async (db: Database, params: SqlParams): Promise<
         throw new Error("Error fetching author");
     }
 }
+
+export const getTenAuthors = async (db: Database, params: SqlParams): Promise<AuthorModel[]> => {
+    const sql = `SELECT * FROM Authors LIMIT 10 OFFSET ?`;
+    try {
+        const rows = await fetchAll<({ id: number; name: string; createdAt: string })>(db, sql, params);
+
+        return rows.map((row) => ({
+            id: row.id,
+            name: row.name,
+            createdAt: row.createdAt,
+        }))
+    } catch (error) {
+        console.error("Error fetching ten authors:", error);
+        throw new Error("Error fetching ten authors");
+    }
+}
