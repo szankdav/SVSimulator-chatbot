@@ -36,6 +36,23 @@ export const getAllMessages = async (db: Database): Promise<MessageModel[]> => {
     }
 };
 
+export const getMessagesByAuthorId = async (db: Database, params: SqlParams): Promise<MessageModel[]> => {
+    const sql = `SELECT * FROM Messages WHERE authorId = ?`;
+    try {
+        const rows = await fetchAll<{ id: number; authorId: number; message: string; createdAt: string }>(db, sql, params);
+
+        return rows.map((row) => ({
+            id: row.id,
+            authorId: row.authorId,
+            content: row.message,
+            messageCreatedAt: row.createdAt,
+        }));
+    } catch (error) {
+        console.error("Error fetching messages by author id:", error);
+        throw new Error("Error fetching messages by author id");
+    }
+};
+
 export const getTenMessages = async (db: Database, params: SqlParams): Promise<MessageModel[]> => {
     const sql = `SELECT * FROM Messages LIMIT 10 OFFSET ?`;
     try {

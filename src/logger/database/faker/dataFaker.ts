@@ -14,7 +14,7 @@ export function createRandomAuthor(): AuthorModel {
     return { id, name, createdAt };
 }
 
-function createRandomMessage(overwrites: Partial<MessageModel> = {}): MessageModel {
+export function createRandomMessage(overwrites: Partial<MessageModel> = {}): MessageModel {
     const {
         id = 0,
         authorId = 0,

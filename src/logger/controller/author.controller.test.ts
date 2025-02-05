@@ -92,6 +92,26 @@ describe('authorController tests', () => {
             })
         })
 
+        describe("getAuthorByIdController tests", () => {
+            it("should return with the author by the given id", async () => {
+                const testAuthorParams1: AuthorModel = { id: 1, name: "Teszt Elek", createdAt: createdAtTime };
+                const testAuthorParams2: AuthorModel = { id: 2, name: "Teszt Elekné", createdAt: createdAtTime };
+
+                await authorController.createAuthorController(db, testAuthorParams1);
+                await authorController.createAuthorController(db, testAuthorParams2);
+                const result = await authorController.getAuthorByIdController(db, testAuthorParams1.id.toString());
+
+                expect(result?.name).toBe(testAuthorParams1.name);
+            })
+    
+            it("should throw an error with the correct message", async () => {
+                vi.spyOn(authorController, 'getAuthorByIdController').mockRejectedValue(new DatabaseError("Error fetching author", 500));
+                
+                await expect(authorController.getAuthorByIdController(db, "Teszt Elek")).rejects.toThrow(DatabaseError);
+                await expect(authorController.getAuthorByIdController(db, "Teszt Elek")).rejects.toThrow("Error fetching author");
+            })
+        })
+
         describe("getTenAuthorsController tests", () => {
             it("should return with ten authors, according to the offset number", async () => {
                 const randomAuthorsArray: AuthorModel[] = [];

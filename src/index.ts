@@ -3,14 +3,14 @@ import express, { NextFunction, Request, Response } from 'express';
 import path from "path";
 import { fileURLToPath } from "url";
 import { createTables } from "./logger/database/tables";
-import { getAllMessagesController } from "./logger/controller/message.controller";
+import { getAllMessagesController, getMessagesByAuthorIdController } from "./logger/controller/message.controller";
 import { getAllLetterCountersAuthorsController, getAllLetterCountersController } from "./logger/controller/letterCounter.controller";
 import { db } from "./logger/database/database";
 import { globalErrorHandler } from "./logger/middleware/globalError.handler";
-import { getAllAuthorsController } from "./logger/controller/author.controller";
+import { getAllAuthorsController, getAuthorByIdController } from "./logger/controller/author.controller";
 import { createRandomAuthorsInDatabase } from "./logger/database/faker/dataFaker";
 import { getTenMessages } from "./logger/model/message.model";
-import { getTenAuthors } from "./logger/model/author.model";
+import { getAuthorById, getTenAuthors } from "./logger/model/author.model";
 
 // Start bot
 startClient();
@@ -37,7 +37,7 @@ app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
 
-app.get('/', async (req: Request, res: Response, next: NextFunction) => {
+app.get('/home', async (req: Request, res: Response, next: NextFunction) => {
     // Get datas for render
     try {
         const messages = await getAllMessagesController(db);
@@ -53,9 +53,29 @@ app.get('/authors/:page', async (req: Request, res: Response, next: NextFunction
     try {
         const page = req.params['page'];
         const authorsSlicedByTen = await getTenAuthors(db, [parseInt(page) == 1 ? 0 : (parseInt(page) - 1) * 10]);
-        const messages = await getAllMessagesController(db);
+        res.render("authors", { authorsSlicedByTen });
+    } catch (error) {
+        next(error);
+    }
+})
+
+app.get('/messages/:page', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const page = req.params['page'];
+        const messagesSlicedByTen = await getTenMessages(db, [parseInt(page) == 1 ? 0 : (parseInt(page) - 1) * 10]);
         const authors = await getAllAuthorsController(db);
-        res.render("authors", { messages, authorsSlicedByTen });
+        res.render("messages", { authors, messagesSlicedByTen });
+    } catch (error) {
+        next(error);
+    }
+})
+
+app.get('/messages/author/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const authorId = req.params['id'];
+        const author = await getAuthorByIdController(db, authorId);
+        const messages = await getMessagesByAuthorIdController(db, [authorId]);
+        res.render("author", { messages, author });
     } catch (error) {
         next(error);
     }

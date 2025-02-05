@@ -11,8 +11,14 @@
 </head>
 
 <body>
-    <div class="container">
+    <%- include('core/navbar'); %>
+    <div class="container mt-3">
         <div class="row">
+            <div class="col-12">
+                <h4>Here you can see the who sent a message on your server. If you want to see the messages for an author, click on an author!</h4>
+            </div>
+        </div>
+        <div class="row mt-3">
             <div class="col-12 d-grid gap-2 d-md-block">
                 <a id="previousButton" class="btn btn-success">Previous</a>
                 <a id="firstPageNumberButton" class="btn btn-success"></a>
@@ -20,7 +26,7 @@
                 <a id="thirdPageNumberButton" class="btn btn-success"></a>
                 <a id="nextButton" class="btn btn-success">Next</a>
             </div>
-            <div class="col-12">
+            <div class="col-12 mt-3">
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -31,7 +37,7 @@
                     </thead>
                     <tbody>
                         <% authorsSlicedByTen.forEach(row=> { %>
-                            <tr>
+                            <tr class="authorRow" data-id="<%= row.id %>">
                                 <td>
                                     <%= row.id %>
                                 </td>
@@ -52,6 +58,7 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
     <script src="/authors.js"></script>
+    <script src="/index.js"></script>
 </body>
 
 </html>

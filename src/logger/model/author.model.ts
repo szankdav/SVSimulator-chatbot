@@ -44,6 +44,16 @@ export const getAuthorByName = async (db: Database, params: SqlParams): Promise<
     }
 }
 
+export const getAuthorById = async(db: Database, params: SqlParams): Promise<AuthorModel | undefined> => {
+    const sql = `SELECT * FROM Authors WHERE id = ?`;
+    try {
+        return await fetchFirst<{ id: number; name: string; createdAt: string }>(db, sql, params);
+    } catch (error) {
+        console.error("Error fetching author:", error);
+        throw new Error("Error fetching author");
+    }
+}
+
 export const getTenAuthors = async (db: Database, params: SqlParams): Promise<AuthorModel[]> => {
     const sql = `SELECT * FROM Authors LIMIT 10 OFFSET ?`;
     try {
