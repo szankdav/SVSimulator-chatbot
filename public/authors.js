@@ -1,7 +1,6 @@
 "use strict";
 
 const pageURL = "http://localhost:3000/authors";
-
 let pageNumber = parseInt(window.location.href.split("/").slice(-1));
 const previousButton = document.getElementById("previousButton");
 const nextButton = document.getElementById("nextButton");
@@ -10,6 +9,8 @@ const secondPageNumberButton = document.getElementById(
   "secondPageNumberButton"
 );
 const thirdPageNumberButton = document.getElementById("thirdPageNumberButton");
+
+const maxPageNumber = nextButton.dataset.maxpages;
 
 const changePageNumbers = () => {
   if (pageNumber === 1) {
@@ -20,7 +21,7 @@ const changePageNumbers = () => {
     thirdPageNumberButton.innerText = pageNumber + 2;
     thirdPageNumberButton.href = `${pageURL}/${thirdPageNumberButton.innerText}`;
     nextButton.href = `${pageURL}/${pageNumber + 1}`;
-  } else {
+  } else if(pageNumber < maxPageNumber) {
     firstPageNumberButton.innerText = pageNumber - 1;
     firstPageNumberButton.href = `${pageURL}/${pageNumber - 1}`;
     previousButton.href = `${pageURL}/${firstPageNumberButton.innerText}`;
@@ -29,6 +30,13 @@ const changePageNumbers = () => {
     thirdPageNumberButton.innerText = pageNumber + 1;
     thirdPageNumberButton.href = `${pageURL}/${thirdPageNumberButton.innerText}`;
     nextButton.href = `${pageURL}/${thirdPageNumberButton.innerText}`;
+  } else {
+    firstPageNumberButton.innerText = pageNumber - 1;
+    firstPageNumberButton.href = `${pageURL}/${pageNumber - 1}`;
+    previousButton.href = `${pageURL}/${firstPageNumberButton.innerText}`;
+    secondPageNumberButton.innerText = pageNumber;
+    secondPageNumberButton.href = `${pageURL}/${secondPageNumberButton.innerText}`;
+    thirdPageNumberButton.classList.add("d-none");
   }
 };
 

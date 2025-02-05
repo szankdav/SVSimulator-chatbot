@@ -15,7 +15,7 @@
         <div class="container mt-3">
             <div class="row">
                 <div class="col-12">
-                    <h4>Here you can see all the messages sent on your server!</h4>
+                    <h4>Here you can see all the messages sent on your server! If you want to see an author's messages, click on the author's name!</h4>
                 </div>
             </div>
             <div class="row mt-3">
@@ -24,7 +24,7 @@
                     <a id="firstPageNumberButton" class="btn btn-success"></a>
                     <a id="secondPageNumberButton" class="btn btn-success"></a>
                     <a id="thirdPageNumberButton" class="btn btn-success"></a>
-                    <a id="nextButton" class="btn btn-success">Next</a>
+                    <a id="nextButton" data-maxpages="<%= messagesPageNumber %>" class="btn btn-success">Next</a>
                 </div>
                 <div class="col-12 mt-3">
                     <table class="table table-striped">
@@ -42,7 +42,7 @@
                                     <td>
                                         <%= row.id %>
                                     </td>
-                                    <td>
+                                    <td class="authorName" data-authorid="<%= row.authorId %>">
                                         <% authors.forEach(authorRow=> { %>
                                             <% if(row.authorId===authorRow.id) { %>
                                                 <%= authorRow.name %>

@@ -3,11 +3,11 @@ import express, { NextFunction, Request, Response } from 'express';
 import path from "path";
 import { fileURLToPath } from "url";
 import { createTables } from "./logger/database/tables";
-import { getAllMessagesController, getMessagesByAuthorIdController } from "./logger/controller/message.controller";
-import { getAllLetterCountersAuthorsController, getAllLetterCountersController } from "./logger/controller/letterCounter.controller";
+import { getAllMessagesController, getMessagesByAuthorIdController, getTenMessagesController } from "./logger/controller/message.controller";
+import { getAllLetterCountersAuthorsController, getAllLetterCountersController, getLetterCountersByAuthorIdController } from "./logger/controller/letterCounter.controller";
 import { db } from "./logger/database/database";
 import { globalErrorHandler } from "./logger/middleware/globalError.handler";
-import { getAllAuthorsController, getAuthorByIdController } from "./logger/controller/author.controller";
+import { getAllAuthorsController, getAuthorByIdController, getTenAuthorsController } from "./logger/controller/author.controller";
 import { createRandomAuthorsInDatabase } from "./logger/database/faker/dataFaker";
 import { getTenMessages } from "./logger/model/message.model";
 import { getAuthorById, getTenAuthors } from "./logger/model/author.model";
@@ -52,8 +52,9 @@ app.get('/home', async (req: Request, res: Response, next: NextFunction) => {
 app.get('/authors/:page', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const page = req.params['page'];
-        const authorsSlicedByTen = await getTenAuthors(db, [parseInt(page) == 1 ? 0 : (parseInt(page) - 1) * 10]);
-        res.render("authors", { authorsSlicedByTen });
+        const authorsPageNumber = (await getAllAuthorsController(db)).length / 10;
+        const authorsSlicedByTen = await getTenAuthorsController(db, [parseInt(page) == 1 ? 0 : (parseInt(page) - 1) * 10]);
+        res.render("authors", { authorsSlicedByTen, authorsPageNumber });
     } catch (error) {
         next(error);
     }
@@ -62,9 +63,10 @@ app.get('/authors/:page', async (req: Request, res: Response, next: NextFunction
 app.get('/messages/:page', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const page = req.params['page'];
-        const messagesSlicedByTen = await getTenMessages(db, [parseInt(page) == 1 ? 0 : (parseInt(page) - 1) * 10]);
+        const messagesPageNumber = (await getAllMessagesController(db)).length / 10;
+        const messagesSlicedByTen = await getTenMessagesController(db, [parseInt(page) == 1 ? 0 : (parseInt(page) - 1) * 10]);
         const authors = await getAllAuthorsController(db);
-        res.render("messages", { authors, messagesSlicedByTen });
+        res.render("messages", { authors, messagesSlicedByTen, messagesPageNumber });
     } catch (error) {
         next(error);
     }
@@ -74,8 +76,21 @@ app.get('/messages/author/:id', async (req: Request, res: Response, next: NextFu
     try {
         const authorId = req.params['id'];
         const author = await getAuthorByIdController(db, authorId);
+        const pageNumberOfAuthor = parseInt(authorId) % 10 != 0 ? Math.floor(parseInt(authorId) / 10) + 1 : parseInt(authorId) / 10;
         const messages = await getMessagesByAuthorIdController(db, [authorId]);
-        res.render("author", { messages, author });
+        res.render("author", { messages, author, pageNumberOfAuthor });
+    } catch (error) {
+        next(error);
+    }
+})
+
+app.get('/statistics/author/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const authorId = req.params['id'];
+        const author = await getAuthorByIdController(db, authorId);
+        const authors = await getAllAuthorsController(db);
+        const letterCounters = await getLetterCountersByAuthorIdController(db, [authorId]);
+        res.render("statistics", { letterCounters, author, authors });
     } catch (error) {
         next(error);
     }

@@ -18,7 +18,7 @@ describe("messageController tests", () => {
     beforeEach(async () => {
         vi.clearAllMocks();
         vi.spyOn(console, 'error').mockImplementation(() => { });
-        //vi.spyOn(console, 'log').mockImplementation(() => { });
+        vi.spyOn(console, 'log').mockImplementation(() => { });
         db = new sqlite3.Database(":memory:");
         await createTables(db);
         const testAuthor1: AuthorModel = { id: 1, name: "Teszt Elek", createdAt: createdAtTime };

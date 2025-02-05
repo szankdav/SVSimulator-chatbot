@@ -1,5 +1,5 @@
 import { Database } from "sqlite3";
-import { createLetterCounters, updateLetterCounter, getLetterCounterByAuthorId, getAllLetterCounters, getAllLetterCountersAuthors, LetterModel } from "../model/letterCounter.model";
+import { createLetterCounters, updateLetterCounter, getLetterCounterByAuthorId, getAllLetterCounters, getAllLetterCountersAuthors, LetterModel, getLetterCountersByAuthorId } from "../model/letterCounter.model";
 import { MessageModel } from "../model/message.model";
 import { SqlParams } from "../types/sqlparams.type";
 import { DatabaseError } from "../middleware/databaseError.handler";
@@ -31,6 +31,15 @@ export const getAllLetterCountersAuthorsController = async (db: Database): Promi
     } catch (error) {
         console.error("Error fetching all authors:", error);
         throw new DatabaseError("Error fetching all authors", 500);
+    }
+}
+
+export const getLetterCountersByAuthorIdController = async (db: Database, params: SqlParams): Promise<LetterModel[]> => {
+    try {
+        return await getLetterCountersByAuthorId(db, params);
+    } catch (error) {
+        console.error("Error fetching letter counters:", error);
+        throw new DatabaseError("Error fetching letter counters", 500);
     }
 }
 

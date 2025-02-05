@@ -9,3 +9,7 @@ a:active {
 .authorRow {
     cursor: pointer;
 }
+
+.authorName{
+    cursor: pointer;
+}

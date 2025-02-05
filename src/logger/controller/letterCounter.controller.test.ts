@@ -87,6 +87,26 @@ describe("letterController tests", () => {
         })
     })
 
+    describe("getLetterCountersByAuthorIdController tests", () => {
+        it("should return with all the letterCounters with the given author id", async () => {
+            const testMessageParams1: MessageModel = { id: 1, authorId: 1, content: "Teszt", messageCreatedAt: createdAtTime };
+            const testMessageParams2: MessageModel = { id: 2, authorId: 1, content: "Teszt", messageCreatedAt: createdAtTime };
+
+            await letterCounterController.createLetterCountersController(db, testMessageParams1);
+            await letterCounterController.createLetterCountersController(db, testMessageParams2);
+            const result = await letterCounterController.getLetterCountersByAuthorIdController(db, [testMessageParams1.authorId]);
+            expect(result[0].authorId).toBe(testMessageParams1.authorId);
+            expect(result[1].authorId).toBe(testMessageParams2.authorId);
+        })
+
+        it("should throw an error with the correct message", async () => {
+            vi.spyOn(letterCounterController, 'getLetterCountersByAuthorIdController').mockRejectedValue(new DatabaseError("Error fetching letter counters", 500));
+
+            await expect(letterCounterController.getLetterCountersByAuthorIdController(db, [1])).rejects.toThrow(DatabaseError);
+            await expect(letterCounterController.getLetterCountersByAuthorIdController(db, [1])).rejects.toThrow("Error fetching letter counters");
+        })
+    })
+
     describe("getAllLetterCountersAuthorsController", () => {
         it("should return with all authors", async () => {
             const testMessageParams1: MessageModel = { id: 1, authorId: 1, content: "Teszt", messageCreatedAt: createdAtTime };
