@@ -9,8 +9,7 @@ import { db } from "./logger/database/database";
 import { globalErrorHandler } from "./logger/middleware/globalError.handler";
 import { getAllAuthorsController, getAuthorByIdController, getTenAuthorsController } from "./logger/controller/author.controller";
 import { createRandomAuthorsInDatabase } from "./logger/database/faker/dataFaker";
-import { getTenMessages } from "./logger/model/message.model";
-import { getAuthorById, getTenAuthors } from "./logger/model/author.model";
+import { usageStatisticByIdController } from "./logger/controller/statistics.controller";
 
 // Start bot
 startClient();
@@ -90,7 +89,8 @@ app.get('/statistics/author/:id', async (req: Request, res: Response, next: Next
         const author = await getAuthorByIdController(db, authorId);
         const authors = await getAllAuthorsController(db);
         const letterCounters = await getLetterCountersByAuthorIdController(db, [authorId]);
-        res.render("statistics", { letterCounters, author, authors });
+        const letterStatistics = await usageStatisticByIdController(db, [authorId]);
+        res.render("statistics", { letterCounters, author, authors, letterStatistics });
     } catch (error) {
         next(error);
     }

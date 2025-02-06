@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker';
+import { fakerHU } from '@faker-js/faker';
 import { AuthorModel } from "../../model/author.model";
 import { createAuthorController, getAuthorByNameController } from "../../controller/author.controller";
 import { Database } from 'sqlite3';
@@ -8,8 +8,8 @@ import { createLetterCountersController } from '../../controller/letterCounter.c
 
 export function createRandomAuthor(): AuthorModel {
     const id = 0;
-    const name = faker.person.fullName();
-    const createdAt = faker.date.past().toLocaleString();
+    const name = fakerHU.person.fullName();
+    const createdAt = fakerHU.date.past().toLocaleString();
 
     return { id, name, createdAt };
 }
@@ -18,8 +18,8 @@ export function createRandomMessage(overwrites: Partial<MessageModel> = {}): Mes
     const {
         id = 0,
         authorId = 0,
-        content = faker.lorem.sentences(),
-        messageCreatedAt = faker.date.past().toLocaleString(),
+        content = fakerHU.lorem.sentences(),
+        messageCreatedAt = fakerHU.date.past().toLocaleString(),
     } = overwrites
 
     return { id, authorId, content, messageCreatedAt };
