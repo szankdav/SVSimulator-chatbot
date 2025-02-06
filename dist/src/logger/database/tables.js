@@ -1,0 +1,51 @@
+import { execute } from "./database";
+export const createAuthorsTable = async (db) => {
+    try {
+        await execute(db, `CREATE TABLE IF NOT EXISTS Authors (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            createdAt TEXT NOT NULL)`);
+    }
+    catch (error) {
+        console.error("Error creating Authors table:", error);
+    }
+};
+export const createMessagesTable = async (db) => {
+    try {
+        await execute(db, `CREATE TABLE IF NOT EXISTS Messages (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            authorId INTEGER NOT NULL,
+            message TEXT NOT NULL,
+            createdAt TEXT NOT NULL,
+            FOREIGN KEY (authorId) REFERENCES Authors(id) ON DELETE CASCADE)`);
+    }
+    catch (error) {
+        console.error("Error creating Messages table:", error);
+    }
+};
+export const createLettersTable = async (db) => {
+    try {
+        await execute(db, `CREATE TABLE IF NOT EXISTS Letters (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        authorId INTEGER NOT NULL,
+        letter TEXT NOT NULL,
+        count INT DEFAULT 0,
+        createdAt TEXT NOT NULL,
+        updatedAt TEXT NOT NULL,
+        FOREIGN KEY (authorId) REFERENCES Authors(id) ON DELETE CASCADE)`);
+    }
+    catch (error) {
+        console.error("Error creating Letters table:", error);
+    }
+};
+export const createTables = async (db) => {
+    try {
+        await execute(db, "PRAGMA foreign_keys = ON;");
+        await createAuthorsTable(db);
+        await createMessagesTable(db);
+        await createLettersTable(db);
+    }
+    catch (error) {
+        console.error("Error creating tables:", error);
+    }
+};
