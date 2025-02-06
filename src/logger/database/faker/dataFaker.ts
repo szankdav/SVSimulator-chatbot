@@ -18,7 +18,7 @@ export function createRandomMessage(overwrites: Partial<MessageModel> = {}): Mes
     const {
         id = 0,
         authorId = 0,
-        content = fakerHU.lorem.sentences(),
+        content = fakerHU.string.fromCharacters('aábcdeéfghiíjklmnoóöőpqrstuúüűvwxyz', { min: 4, max: 100}),
         messageCreatedAt = fakerHU.date.past().toLocaleString(),
     } = overwrites
 
