@@ -43,7 +43,7 @@ app.get('/messages/author/:id', messagesByAuthorsMiddleware)
 app.get('/statistics/author/:id', statisticsByAuthorMiddleware)
 
 app.use((req, res, next) => {
-    next(new DatabaseError("Page not found", 404));
+    next(new DatabaseError("Page not found!", 404));
 });
 
 app.use(globalErrorHandler);

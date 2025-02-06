@@ -23,6 +23,9 @@ export const messagesByAuthorsMiddleware = async (req: Request, res: Response, n
     try {
         const authorId = req.params['id'];
         const author = await getAuthorByIdController(db, authorId);
+        if (!author) {
+            throw new DatabaseError("Page not found!", 404);
+        }
         const pageNumberOfAuthor = parseInt(authorId) % 10 != 0 ? Math.floor(parseInt(authorId) / 10) + 1 : parseInt(authorId) / 10;
         const messages = await getMessagesByAuthorIdController(db, [authorId]);
         res.render("author", { messages, author, pageNumberOfAuthor });
