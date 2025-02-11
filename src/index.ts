@@ -6,7 +6,6 @@ import { createTables } from "./logger/database/tables";
 import { db } from "./logger/database/database";
 import { errorHandler } from "./logger/handlers/error.handler";
 import { fillDatabaseWithFakeData } from "./logger/database/faker/dataFaker";
-import { DatabaseError } from "./logger/utils/customErrorClasses/databaseError.class";
 import { homeHandler } from "./logger/handlers/home.handler";
 import { authorsHandler } from "./logger/handlers/authors.handler";
 import { messagesHandler, messagesByAuthorsHandler } from "./logger/handlers/messages.handler";
