@@ -15,27 +15,27 @@
         <div class="container mt-3">
             <div class="row">
                 <div class="col-12 d-grid gap-2 d-md-block">
-                    <a href="http://localhost:3000/statistics/author/<%if(author.id>1){%><%=author.id-1%><%}else{%><%=1%><%}%>"
+                    <a href="http://localhost:3000/statistics/author/<%if(author.id>authors[0].id){%><%=author.id-1%><%}else{%><%=authors[0].id%><%}%>"
                         class="btn btn-success">Previous author</a>
-                    <a href="http://localhost:3000/statistics/author/<%if(author.id<authors.length){%><%=author.id+1%><%}else{%><%=authors.length%><%}%>"
+                    <a href="http://localhost:3000/statistics/author/<%if(author.id<authors[authors.length - 1].id){%><%=author.id+1%><%}else{%><%=authors[authors.length - 1].id%><%}%>"
                         class="btn btn-success">Next author</a>
                 </div>
                 <div class="col-12 mt-3">
                     <h4>Author:</h4>
-                    <p>ID: <%= author.id %>
+                    <p data-testid="id">ID: <%if(author.id){%><%= author.id %><%}else{%><%= "-"%><%}%>
                     </p>
-                    <p>Name: <%= author.name %>
+                    <p data-testid="name">Name: <%= author.name %>
                     </p>
-                    <p>Created: <%= author.createdAt %>
+                    <p data-testid="created">Created: <%= author.createdAt %>
                     </p>
                 </div>
                 <div class="col-12 d-grid gap-2 d-md-block">
-                    <a class="btn btn-success" href="http://localhost:3000/messages/author/<%= author.id %>">Go back to
+                    <a class="btn btn-success" href="http://localhost:3000/messages/author/<%= author.id%>">Go back to
                         author</a>
                     <button id="seeStatistics" class="btn btn-success">Show statistics</button>
                 </div>
                 <div id="statistics" class="col-12 mt-3 d-none">
-                    <h4>Here you can see the usage rate of each letter out of all the letters typed by the author:</h4>
+                    <h4><%if(author.id){%><%= "Here you can see the usage rate of each letter out of all the letters typed by the author:" %><%}else{%><%= "-"%><%}%></h4>
                     <% letterStatistics.forEach(stat=> { %>
                         <% Object.entries(stat).forEach(([letter, percent])=> { %>
                             <p class="mt-2">
@@ -48,7 +48,7 @@
                             <% }); %>
                                 <% }); %>
                 </div>
-                <div class="col-12 mt-3">
+                <div  class="col-12 mt-3">
                     <table class="table table-striped">
                         <thead>
                             <th>ID</th>
@@ -57,7 +57,7 @@
                             <th>Created</th>
                             <th>Updated</th>
                         </thead>
-                        <tbody>
+                        <tbody data-testid="statisticsTable">
                             <% letterCounters.forEach(row=> { %>
                                 <tr>
                                     <td>

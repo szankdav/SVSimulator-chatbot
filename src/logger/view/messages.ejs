@@ -13,55 +13,64 @@
 <body>
     <%- include('core/navbar'); %>
         <div class="container mt-3">
-            <div class="row">
-                <div class="col-12">
-                    <h4>Here you can see all the messages sent on your server! If you want to see an author's messages, click on the author's name!</h4>
+            <%if(error === ""){%>
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Here you can see all the messages sent on your server! If you want to see an author's
+                            messages, click on the author's name!</h4>
+                    </div>
                 </div>
-            </div>
-            <div class="row mt-3">
-                <div class="col-12 d-grid gap-2 d-md-block">
-                    <a id="previousButton" class="btn btn-success">Previous</a>
-                    <a id="firstPageNumberButton" class="btn btn-success"></a>
-                    <a id="secondPageNumberButton" class="btn btn-success"></a>
-                    <a id="thirdPageNumberButton" class="btn btn-success"></a>
-                    <a id="nextButton" data-maxpages="<%= messagesPageNumber %>" class="btn btn-success">Next</a>
-                </div>
-                <div class="col-12 mt-3">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Author</th>
-                                <th>Content</th>
-                                <th>Created</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% messagesSlicedByTen.forEach(row=> { %>
-                                <tr class="messageRow" data-id="<%= row.id %>">
-                                    <td>
-                                        <%= row.id %>
-                                    </td>
-                                    <td class="authorName" data-authorid="<%= row.authorId %>">
-                                        <% authors.forEach(authorRow=> { %>
-                                            <% if(row.authorId===authorRow.id) { %>
-                                                <%= authorRow.name %>
-                                                    <% } %>
-
-                                                        <% }) %>
-                                    </td>
-                                    <td>
-                                        <%= row.content %>
-                                    </td>
-                                    <td>
-                                        <%= row.messageCreatedAt %>
-                                    </td>
+                <div class="row mt-3">
+                    <div class="col-12 d-grid gap-2 d-md-block">
+                        <a id="previousButton" class="btn btn-success" href="">Previous</a>
+                        <a id="firstPageNumberButton" class="btn btn-success"></a>
+                        <a id="secondPageNumberButton" class="btn btn-success"></a>
+                        <a id="thirdPageNumberButton" class="btn btn-success"></a>
+                        <a id="nextButton" data-maxpages="<%= messagesPageNumber %>" class="btn btn-success">Next</a>
+                    </div>
+                    <div class="col-12 mt-3">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Author</th>
+                                    <th>Content</th>
+                                    <th>Created</th>
                                 </tr>
-                                <% }) %>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <% messagesSlicedByTen.forEach(row=> { %>
+                                    <tr class="messageRow" data-id="<%= row.id %>">
+                                        <td>
+                                            <%= row.id %>
+                                        </td>
+                                        <td class="authorName" data-authorid="<%= row.authorId %>">
+                                            <% authors.forEach(authorRow=> { %>
+                                                <% if(row.authorId===authorRow.id) { %>
+                                                    <%= authorRow.name %>
+                                                        <% } %>
+
+                                                            <% }) %>
+                                        </td>
+                                        <td>
+                                            <%= row.content %>
+                                        </td>
+                                        <td>
+                                            <%= row.messageCreatedAt %>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
+                <%}else{%>
+                    <h4>
+                        <%= error %>
+                    </h4>
+                    <a data-testid="goBack" class="btn btn-success" href="http://localhost:3000/messages/1">Go back to
+                        messages</a>
+                    <%}%>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

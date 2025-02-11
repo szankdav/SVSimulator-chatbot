@@ -1,5 +1,6 @@
 node_modules
 .env
+DiscordMessages.db
 
 # Playwright
 /test-results/

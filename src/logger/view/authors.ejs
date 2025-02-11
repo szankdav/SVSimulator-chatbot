@@ -13,6 +13,7 @@
 <body>
     <%- include('core/navbar'); %>
     <div class="container mt-3">
+        <%if(error === ""){%>
         <div class="row">
             <div class="col-12">
                 <h4>Here you can see the who sent a message on your server. If you want to see the messages for an author, click on an author!</h4>
@@ -53,6 +54,13 @@
                 </table>
             </div>
         </div>
+        <%}else{%>
+            <h4>
+                <%= error %>
+            </h4>
+            <a data-testid="goBack" class="btn btn-success" href="http://localhost:3000/authors/1">Go back to
+                authors</a>
+            <%}%>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

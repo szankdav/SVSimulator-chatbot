@@ -4,13 +4,14 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { createTables } from "./logger/database/tables";
 import { db } from "./logger/database/database";
-import { globalErrorHandler } from "./logger/middleware/globalError.handler";
-import { createRandomAuthorsInDatabase } from "./logger/database/faker/dataFaker";
-import { DatabaseError } from "./logger/middleware/databaseError.handler";
-import { homeMiddleware } from "./logger/middleware/home.middleware";
-import { authorsMiddleware } from "./logger/middleware/authors.middleware";
-import { messagesMiddleware, messagesByAuthorsMiddleware } from "./logger/middleware/messages.middleware";
-import { statisticsByAuthorMiddleware } from "./logger/middleware/statistics.middleware";
+import { errorHandler } from "./logger/handlers/error.handler";
+import { fillDatabaseWithFakeData } from "./logger/database/faker/dataFaker";
+import { DatabaseError } from "./logger/utils/customErrorClasses/databaseError.class";
+import { homeHandler } from "./logger/handlers/home.handler";
+import { authorsHandler } from "./logger/handlers/authors.handler";
+import { messagesHandler, messagesByAuthorsHandler } from "./logger/handlers/messages.handler";
+import { statisticsByAuthorHandler } from "./logger/handlers/statistics.handler";
+import { messageLoggerHandler } from "./logger/handlers/messageLogger.handler";
 
 // Start bot
 startClient();
@@ -22,6 +23,7 @@ const app = express();
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, '/logger/view'));
 app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.json())
 const port = process.env.PORT || 3000;
 
 // Create tables
@@ -29,21 +31,17 @@ await createTables(db);
 
 // Create fake datas for database
 if (process.env.NODE_ENV === "devDb") {
-    await createRandomAuthorsInDatabase(db);
+    await fillDatabaseWithFakeData(db);
 }
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
 
-app.get('/home', homeMiddleware);
-app.get('/authors/:page', authorsMiddleware)
-app.get('/messages/:page', messagesMiddleware)
-app.get('/messages/author/:id', messagesByAuthorsMiddleware)
-app.get('/statistics/author/:id', statisticsByAuthorMiddleware)
-
-app.use((req, res, next) => {
-    next(new DatabaseError("Page not found!", 404));
-});
-
-app.use(globalErrorHandler);
+app.get('/home', homeHandler);
+app.get('/authors/:page', authorsHandler);
+app.get('/messages/:page', messagesHandler);
+app.get('/messages/author/:id', messagesByAuthorsHandler);
+app.get('/statistics/author/:id', statisticsByAuthorHandler);
+app.post('/logMessage', messageLoggerHandler);
+app.use(errorHandler);

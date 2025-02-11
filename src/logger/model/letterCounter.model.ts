@@ -12,7 +12,7 @@ export type LetterModel = {
 }
 
 export const updateLetterCounter = async (db: Database, params: SqlParams): Promise<void> => {
-    const sql = `UPDATE Letters SET count = count + 1 WHERE authorId = ? AND letter = ?`;
+    const sql = `UPDATE Letters SET count = count + 1, updatedAt = ? WHERE authorId = ? AND letter = ?`;
     try {
         await execute(db, sql, params);
     } catch (error) {

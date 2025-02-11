@@ -1,14 +1,26 @@
 import { Message, OmitPartialGroupDMChannel } from "discord.js";
-import { logDiscordMessage } from "../../logger/controller/messageCreateEvent.controller";
-import { db } from "../../logger/database/database";
 
 export async function createMessage(message: OmitPartialGroupDMChannel<Message<boolean>>) {
   try {
     if (message.author.bot) return;
     if (message.content.startsWith('<@')) return;
 
-    await logDiscordMessage(db, message);
+    const messageData = {
+      username: message.author.globalName,
+      messageCreatedAt: message.createdTimestamp,
+      content: message.content,
+    }
 
+    const result = await fetch("http://localhost:3000/logMessage", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ message: messageData }),
+    })
+
+    const response = await result.json();
+    console.log(response);
   } catch (error) {
     console.error("Error creating message:", error);
   }

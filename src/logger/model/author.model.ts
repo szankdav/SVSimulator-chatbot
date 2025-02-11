@@ -1,7 +1,6 @@
 import { Database } from "sqlite3";
 import { execute, fetchAll, fetchFirst } from "../database/database.js";
 import { SqlParams } from "../types/sqlparams.type.js";
-import { DatabaseError } from "../middleware/databaseError.handler.js";
 
 export type AuthorModel = {
     id: number;
@@ -51,7 +50,7 @@ export const getAuthorById = async(db: Database, params: SqlParams): Promise<Aut
         return await fetchFirst<{ id: number; name: string; createdAt: string }>(db, sql, params);
     } catch (error) {
         console.error("Error fetching author:", error);
-        throw new DatabaseError("Error fetching author", 500);
+        throw new Error("Error fetching author");
     }
 }
 
