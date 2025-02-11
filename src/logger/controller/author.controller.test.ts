@@ -7,11 +7,12 @@ import { AuthorModel } from "../model/author.model.ts";
 import { MessageModel } from "../model/message.model.ts";
 import * as authorsController from "../controller/author.controller.ts";
 import { RenderObject } from "../types/renderObject.type.ts";
+import { AuthorsError } from "../utils/customErrorClasses/authorsError.class.ts";
 
 let db: Database;
 const createdAtTime = new Date().toLocaleString();
 
-describe('authorController tests', () => {
+describe('author.controller tests', () => {
     beforeEach(async () => {
         vi.clearAllMocks();
         vi.spyOn(console, 'error').mockImplementation(() => { });
@@ -46,21 +47,21 @@ describe('authorController tests', () => {
             expect(renderObject.options).toStrictEqual({authorsPageNumber, authorsSlicedByTen, error});
         })
 
-        // it('should not create author again if already in the database', async () => {
-        //     const authorParams: AuthorModel = { id: 1, name: "Teszt Elek", createdAt: createdAtTime };
-        //     vi.spyOn(authorModel, 'createAuthor');
-        //     vi.spyOn(authorModel, 'getAuthorByName').mockResolvedValue({ id: 1, name: "Teszt Elek", createdAt: createdAtTime });
+        it('should return with a valid renderObject if data is not valid', async () => {
+            vi.spyOn(authorsController, 'authorsController');
+            const renderObject: RenderObject = await authorsController.authorsController(db, 10);
+            expect(renderObject.viewName).toBe("authors");
+            const authorsPageNumber = 1;
+            const authorsSlicedByTen = [];
+            const error = "No authors to show... Are you sure you are at the right URL?";
+            expect(renderObject.options).toStrictEqual({authorsPageNumber, authorsSlicedByTen, error});
+        })
 
-        //     await authorController.createAuthorController(db, authorParams);
-        //     expect(authorModel.createAuthor).not.toHaveBeenCalled();
-        // })
+        it('should throw an error with the correct message', async () => {
+            vi.spyOn(authorsController, 'authorsController').mockRejectedValue(new AuthorsError("Error fetching authors!", 500));
 
-        // it('should throw an error with the correct message', async () => {
-        //     const authorParams: AuthorModel = { id: 1, name: "Teszt Elek", createdAt: createdAtTime };
-        //     vi.spyOn(authorController, 'createAuthorController').mockRejectedValue(new DatabaseError("Error creating author", 500));
-
-        //     await expect(authorController.createAuthorController(db, authorParams)).rejects.toThrow(DatabaseError);
-        //     await expect(authorController.createAuthorController(db, authorParams)).rejects.toThrow("Error creating author");
-        // })
+            await expect(authorsController.authorsController(db, 1)).rejects.toThrow(AuthorsError);
+            await expect(authorsController.authorsController(db, 1)).rejects.toThrow("Error fetching authors!");
+        })
     })
 })

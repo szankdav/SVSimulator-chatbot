@@ -27,7 +27,7 @@ export const statisticsByAuthorController = async (db: Database, params: SqlPara
     }
 }
 
-const getLetterStatictics = async (db: Database, params: SqlParams): Promise<LetterStatistic[]> => {
+export const getLetterStatictics = async (db: Database, params: SqlParams): Promise<LetterStatistic[]> => {
     try {
         let letterStatistics: LetterStatistic[] = [];
         let sumOfLetterCount: number = 0;

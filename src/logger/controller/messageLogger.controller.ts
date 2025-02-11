@@ -34,7 +34,7 @@ export const messageLoggerController = async (db: Database, message: {username: 
     }
 }
 
-const createLetterCountersInDatabase = async (db: Database, messageParams: MessageModel): Promise<void> => {
+export const createLetterCountersInDatabase = async (db: Database, messageParams: MessageModel): Promise<void> => {
     try {
         const existingAuthorId = await checkAuthorIdExistense(db, [messageParams.authorId]);
         if (!existingAuthorId)
@@ -46,7 +46,7 @@ const createLetterCountersInDatabase = async (db: Database, messageParams: Messa
     }
 };
 
-const checkAuthorIdExistense = async (db: Database, params: SqlParams): Promise<{ authorId: number } | undefined> => {
+export const checkAuthorIdExistense = async (db: Database, params: SqlParams): Promise<{ authorId: number } | undefined> => {
     try {
         return await getLetterCounterByAuthorId(db, params);
     } catch (error) {
@@ -55,7 +55,7 @@ const checkAuthorIdExistense = async (db: Database, params: SqlParams): Promise<
     }
 };
 
-const letterIterator = async (db: Database, messageParams: MessageModel): Promise<void> => {
+export const letterIterator = async (db: Database, messageParams: MessageModel): Promise<void> => {
     const validLetters = messageParams.content
         .toLowerCase()
         .split("")
