@@ -9,7 +9,7 @@ export const authorsController = async (db: Database, page: number): Promise<Ren
             const renderObject: RenderObject = { viewName: "error", options: { err: "Page not found!" } } 
             return renderObject; 
         }
-        const authorsPageNumber = (await getAllAuthors(db)).length / 10;
+        const authorsPageNumber = Math.ceil((await getAllAuthors(db)).length / 10);
         const authorsSlicedByTen = await getTenAuthors(db, [page == 1 ? 0 : (page - 1) * 10]);
         let error: string = "";
         if (page > authorsPageNumber) { error = "No authors to show... Are you sure you are at the right URL?" };
