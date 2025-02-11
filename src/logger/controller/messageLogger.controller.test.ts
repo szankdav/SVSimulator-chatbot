@@ -6,10 +6,10 @@ import * as letterCounterModel from "../model/letterCounter.model.ts";
 import { createTables } from "../database/tables.ts";
 import sqlite3, { Database } from "sqlite3";
 import { DatabaseError } from "../utils/customErrorClasses/databaseError.class.ts";
-import { LetterCounterError } from "../utils/customErrorClasses/letterCounterError.class.ts";
 import { AuthorsError } from "../utils/customErrorClasses/authorsError.class.ts";
 import { AuthorModel } from "../model/author.model.ts";
 import { MessageModel } from "../model/message.model.ts";
+import { LetterCounterError } from "../utils/customErrorClasses/LetterCounterError.class.ts";
 
 let db: Database;
 const createdAtTime = new Date().toLocaleString();
