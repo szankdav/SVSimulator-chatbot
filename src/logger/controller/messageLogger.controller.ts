@@ -4,7 +4,7 @@ import { DatabaseError } from "../utils/customErrorClasses/databaseError.class";
 import { Database } from "sqlite3";
 import { SqlParams } from "../types/sqlparams.type";
 import { createLetterCounters, getLetterCounterByAuthorId, updateLetterCounter } from "../model/letterCounter.model";
-import { LetterCounterError } from "../utils/customErrorClasses/LetterCounterError.class";
+import { LetterCounterError } from "../utils/customErrorClasses/letterCounterError.class";
 import { AuthorsError } from "../utils/customErrorClasses/authorsError.class";
 
 export const messageLoggerController = async (db: Database, message: {username: string, messageCreatedAt: number, content: string}): Promise<void> => {

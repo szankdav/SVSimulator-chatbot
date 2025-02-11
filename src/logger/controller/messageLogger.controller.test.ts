@@ -9,7 +9,7 @@ import { DatabaseError } from "../utils/customErrorClasses/databaseError.class.t
 import { AuthorsError } from "../utils/customErrorClasses/authorsError.class.ts";
 import { AuthorModel } from "../model/author.model.ts";
 import { MessageModel } from "../model/message.model.ts";
-import { LetterCounterError } from "../utils/customErrorClasses/LetterCounterError.class.ts";
+import { LetterCounterError } from "../utils/customErrorClasses/letterCounterError.class.ts";
 
 let db: Database;
 const createdAtTime = new Date().toLocaleString();
