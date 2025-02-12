@@ -1,8 +1,8 @@
 import { Client } from "discord.js";
-import { config } from "../../../config";
-import { deployCommands } from "./deploy-commands";
-import { cooldownForInteraction } from "../interactions/cooldown.interaction";
-import { createMessage, answerBotMention } from "../events/messageCreate.event"
+import { config } from "../../config.js";
+import { deployCommands } from "./deploy-commands.js";
+import { cooldownForInteraction } from "../interactions/cooldown.interaction.js";
+import { createMessage, answerBotMention } from "../events/messageCreate.event.js"
 
 const client = new Client({
   intents: ["Guilds", "GuildMessages", "DirectMessages", "MessageContent"],

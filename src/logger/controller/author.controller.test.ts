@@ -1,13 +1,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import * as authorModel from "../model/author.model.ts";
-import * as messageModel from "../model/message.model.ts";
-import { createTables } from "../database/tables.ts";
+import * as authorModel from "../model/author.model";
+import * as messageModel from "../model/message.model";
+import { createTables } from "../database/tables";
 import sqlite3, { Database } from "sqlite3";
-import { AuthorModel } from "../model/author.model.ts";
-import { MessageModel } from "../model/message.model.ts";
-import * as authorsController from "../controller/author.controller.ts";
-import { RenderObject } from "../types/renderObject.type.ts";
-import { AuthorsError } from "../utils/customErrorClasses/authorsError.class.ts";
+import { AuthorModel } from "../model/author.model";
+import { MessageModel } from "../model/message.model";
+import * as authorsController from "../controller/author.controller";
+import { RenderObject } from "../types/renderObject.type";
+import { AuthorsError } from "../utils/customErrorClasses/authorsError.class";
 
 let db: Database;
 const createdAtTime = new Date().toLocaleString();
@@ -52,7 +52,7 @@ describe('author.controller tests', () => {
             const renderObject: RenderObject = await authorsController.authorsController(db, 10);
             expect(renderObject.viewName).toBe("authors");
             const authorsPageNumber = 1;
-            const authorsSlicedByTen = [];
+            const authorsSlicedByTen: [] = [];
             const error = "No authors to show... Are you sure you are at the right URL?";
             expect(renderObject.options).toStrictEqual({authorsPageNumber, authorsSlicedByTen, error});
         })

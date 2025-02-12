@@ -1,5 +1,5 @@
 import { Database } from "sqlite3";
-import { execute } from "./database";
+import { execute } from "./database.js";
 
 export const createAuthorsTable = async (db: Database): Promise<void> => {
     try {

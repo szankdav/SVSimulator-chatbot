@@ -1,6 +1,6 @@
 import { fakerHU } from '@faker-js/faker';
 import { Database } from 'sqlite3';
-import { execute, fetchAll } from "../database";
+import { execute, fetchAll } from "../database.js";
 
 const createFakeAuthors = (): string[] => {
     const fakeAuthors: string[] = [];

@@ -1,15 +1,15 @@
 import { beforeEach, vi, describe, it, expect, afterEach } from "vitest";
-import * as authorModel from "../model/author.model.ts";
-import * as messageModel from "../model/message.model.ts";
-import * as messageLoggerController from "../controller/messageLogger.controller.ts";
-import * as letterCounterModel from "../model/letterCounter.model.ts";
-import { createTables } from "../database/tables.ts";
+import * as authorModel from "../model/author.model";
+import * as messageModel from "../model/message.model";
+import * as messageLoggerController from "../controller/messageLogger.controller";
+import * as letterCounterModel from "../model/letterCounter.model";
+import { createTables } from "../database/tables";
 import sqlite3, { Database } from "sqlite3";
-import { DatabaseError } from "../utils/customErrorClasses/databaseError.class.ts";
-import { AuthorsError } from "../utils/customErrorClasses/authorsError.class.ts";
-import { AuthorModel } from "../model/author.model.ts";
-import { MessageModel } from "../model/message.model.ts";
-import { LetterCounterError } from "../utils/customErrorClasses/letterCounterError.class.ts";
+import { DatabaseError } from "../utils/customErrorClasses/databaseError.class";
+import { AuthorsError } from "../utils/customErrorClasses/authorsError.class";
+import { AuthorModel } from "../model/author.model";
+import { MessageModel } from "../model/message.model";
+import { LetterCounterError } from "../utils/customErrorClasses/letterCounterError.class";
 
 let db: Database;
 const createdAtTime = new Date().toLocaleString();

@@ -1,11 +1,11 @@
-import { createAuthor, getAuthorByName } from "../model/author.model";
-import { createMessage, MessageModel } from "../model/message.model";
-import { DatabaseError } from "../utils/customErrorClasses/databaseError.class";
+import { createAuthor, getAuthorByName } from "../model/author.model.js";
+import { createMessage, MessageModel } from "../model/message.model.js";
+import { DatabaseError } from "../utils/customErrorClasses/databaseError.class.js";
 import { Database } from "sqlite3";
-import { SqlParams } from "../types/sqlparams.type";
-import { createLetterCounters, getLetterCounterByAuthorId, updateLetterCounter } from "../model/letterCounter.model";
-import { LetterCounterError } from "../utils/customErrorClasses/letterCounterError.class";
-import { AuthorsError } from "../utils/customErrorClasses/authorsError.class";
+import { SqlParams } from "../types/sqlparams.type.js";
+import { createLetterCounters, getLetterCounterByAuthorId, updateLetterCounter } from "../model/letterCounter.model.js";
+import { LetterCounterError } from "../utils/customErrorClasses/letterCounterError.class.js";
+import { AuthorsError } from "../utils/customErrorClasses/authorsError.class.js";
 
 export const messageLoggerController = async (db: Database, message: {username: string, messageCreatedAt: number, content: string}): Promise<void> => {
     try {

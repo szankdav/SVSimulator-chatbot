@@ -1,13 +1,13 @@
 import { beforeEach, vi, describe, it, expect, afterEach } from "vitest";
-import * as authorModel from "../model/author.model.ts";
-import * as messageModel from "../model/message.model.ts";
-import { createTables } from "../database/tables.ts";
+import * as authorModel from "../model/author.model";
+import * as messageModel from "../model/message.model";
+import { createTables } from "../database/tables";
 import sqlite3, { Database } from "sqlite3";
-import { MessagesError } from "../utils/customErrorClasses/messagesError.class.ts";
-import * as messagesController from "../controller/message.controller.ts";
-import { AuthorModel } from "../model/author.model.ts";
-import { MessageModel } from "../model/message.model.ts";
-import { RenderObject } from "../types/renderObject.type.ts";
+import { MessagesError } from "../utils/customErrorClasses/messagesError.class";
+import * as messagesController from "../controller/message.controller";
+import { AuthorModel } from "../model/author.model";
+import { MessageModel } from "../model/message.model";
+import { RenderObject } from "../types/renderObject.type";
 
 let db: Database;
 const createdAtTime = new Date().toLocaleString();
@@ -62,7 +62,7 @@ describe("message.controller tests", () => {
             const renderObject: RenderObject = await messagesController.messagesController(db, 10);
             expect(renderObject.viewName).toBe("messages");
             const messagesPageNumber = 1;
-            const messagesSlicedByTen = [];
+            const messagesSlicedByTen: [] = [];
             const authors = [testAuthor1, testAuthor2];
             const error = "No messages to show... Are you sure you are at the right URL?";
 
@@ -96,7 +96,7 @@ describe("message.controller tests", () => {
             vi.spyOn(messagesController, 'messagesByAuthorsController');
             const renderObject: RenderObject = await messagesController.messagesByAuthorsController(db, [10]);
             expect(renderObject.viewName).toBe("author");
-            const messages = [];
+            const messages: [] = [];
             const author = {id: 0, name: "-", createdAt: "-"};
 
             expect(renderObject.options).toStrictEqual({ author, messages });

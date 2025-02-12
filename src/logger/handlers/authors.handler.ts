@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { authorsController } from "../controller/author.controller";
-import { db } from "../database/database";
+import { authorsController } from "../controller/author.controller.js";
+import { db } from "../database/database.js";
 
 export const authorsHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {

@@ -1,9 +1,9 @@
 import { Database } from "sqlite3";
-import { getAllMessages, getTenMessages, getMessagesByAuthorId } from "../model/message.model";
-import { SqlParams } from "../types/sqlparams.type";
-import { MessagesError } from "../utils/customErrorClasses/messagesError.class";
-import { RenderObject } from "../types/renderObject.type";
-import { getAllAuthors, getAuthorById } from "../model/author.model";
+import { getAllMessages, getTenMessages, getMessagesByAuthorId } from "../model/message.model.js";
+import { SqlParams } from "../types/sqlparams.type.js";
+import { MessagesError } from "../utils/customErrorClasses/messagesError.class.js";
+import { RenderObject } from "../types/renderObject.type.js";
+import { getAllAuthors, getAuthorById } from "../model/author.model.js";
 
 export const messagesController = async (db: Database, page: number): Promise<RenderObject> => {
     try {

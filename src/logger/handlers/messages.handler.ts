@@ -1,6 +1,6 @@
 import { NextFunction, Response, Request } from "express";
-import { messagesByAuthorsController, messagesController } from "../controller/message.controller";
-import { db } from "../database/database";
+import { messagesByAuthorsController, messagesController } from "../controller/message.controller.js";
+import { db } from "../database/database.js";
 
 export const messagesHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {

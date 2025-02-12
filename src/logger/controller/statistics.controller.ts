@@ -1,19 +1,22 @@
 import { Database } from "sqlite3";
-import { SqlParams } from "../types/sqlparams.type";
-import { LetterStatistic } from "../types/letterStatistic.type";
-import { StatisticError } from "../utils/customErrorClasses/statisticError.class";
-import { getAllAuthors, getAuthorById } from "../model/author.model";
-import { getLetterCountersByAuthorId } from "../model/letterCounter.model";
-import { RenderObject } from "../types/renderObject.type";
+import { SqlParams } from "../types/sqlparams.type.js";
+import { LetterStatistic } from "../types/letterStatistic.type.js";
+import { StatisticError } from "../utils/customErrorClasses/statisticError.class.js";
+import { getAllAuthors, getAuthorById } from "../model/author.model.js";
+import { getLetterCountersByAuthorId } from "../model/letterCounter.model.js";
+import { RenderObject } from "../types/renderObject.type.js";
 
 export const statisticsByAuthorController = async (db: Database, params: SqlParams): Promise<RenderObject> => {
     try {
         let author = await getAuthorById(db, params);
-        if (!author) { author = { id: 0, name: "-", createdAt: "-" } };
-
-        const authors = await getAllAuthors(db);
+        let authors = await getAllAuthors(db);
         const letterCounters = await getLetterCountersByAuthorId(db, params);
         const letterStatistics = await getLetterStatictics(db, params);
+
+        if (!author) {
+            author = { id: 0, name: "-", createdAt: "-" }
+            authors = [{ id: 0, name: "-", createdAt: "-" }]
+        };
 
         let renderObject: RenderObject = {
             viewName: "statistics",

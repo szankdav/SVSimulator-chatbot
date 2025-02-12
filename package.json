@@ -8,7 +8,9 @@
     "devDb": "NODE_ENV=devDb tsx watch src/index.ts",
     "dev": "tsx watch src/index.ts",
     "start": "node dist/index.js",
-    "build": "tsup src/index.ts --format esm --minify",
+    "copyfiles": "copyfiles -u 1 \"src/logger/view/**/*\" \"dist/\"",
+    "copy-public": "copyfiles -u 1 \"src/public/*\" \"dist/public\"",
+    "build": "tsup --external express && npm run copyfiles && npm run copy-public",
     "test": "npx vitest",
     "playwright": "npx playwright test --ui"
   },
@@ -20,6 +22,7 @@
     "@playwright/test": "^1.50.1",
     "@types/express": "^5.0.0",
     "@types/node": "^22.12.0",
+    "copyfiles": "^2.4.1",
     "eslint": "^9.18.0",
     "express": "^4.21.2",
     "ts-node": "^10.9.2",

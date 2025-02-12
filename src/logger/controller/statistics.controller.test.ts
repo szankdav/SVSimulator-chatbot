@@ -1,15 +1,15 @@
 import { beforeEach, vi, describe, it, expect, afterEach } from "vitest";
-import * as authorModel from "../model/author.model.ts";
-import * as messageModel from "../model/message.model.ts";
-import * as statisticController from "../controller/statistics.controller.ts";
-import * as letterCounterModel from "../model/letterCounter.model.ts";
-import { createTables } from "../database/tables.ts";
+import * as authorModel from "../model/author.model";
+import * as messageModel from "../model/message.model";
+import * as statisticController from "../controller/statistics.controller";
+import * as letterCounterModel from "../model/letterCounter.model";
+import { createTables } from "../database/tables";
 import sqlite3, { Database } from "sqlite3";
-import { AuthorModel } from "../model/author.model.ts";
-import { MessageModel } from "../model/message.model.ts";
-import { RenderObject } from "../types/renderObject.type.ts";
-import { StatisticError } from "../utils/customErrorClasses/statisticError.class.ts";
-import { LetterStatistic } from "../types/letterStatistic.type.ts";
+import { AuthorModel } from "../model/author.model";
+import { MessageModel } from "../model/message.model";
+import { RenderObject } from "../types/renderObject.type";
+import { StatisticError } from "../utils/customErrorClasses/statisticError.class";
+import { LetterStatistic } from "../types/letterStatistic.type";
 
 let db: Database;
 const createdAtTime = new Date().toLocaleString();
@@ -66,7 +66,7 @@ describe("statisticController tests", () => {
 
             expect(renderObject.viewName).toBe("statistics");
             const author = { id: 0, name: "-", createdAt: "-" };
-            const authors = [testAuthor1, testAuthor2];
+            const authors = [{ id: 0, name: "-", createdAt: "-" }];
             const letterCounters = await letterCounterModel.getLetterCountersByAuthorId(db, [1]);
             const letterStatistics = await statisticController.getLetterStatictics(db, [1]);
 
@@ -85,8 +85,8 @@ describe("statisticController tests", () => {
         it("should return with LetterStatistics array", async () => {
             vi.spyOn(statisticController, 'getLetterStatictics');
             vi.spyOn(letterCounterModel, 'getLetterCountersByAuthorId').mockResolvedValue([
-                { id: 1, authorId: 1, letter: "a", count: 4, createdAt: createdAtTime, updatedAt: createdAtTime},
-                { id: 1, authorId: 1, letter: "b", count: 6, createdAt: createdAtTime, updatedAt: createdAtTime},
+                { id: 1, authorId: 1, letter: "a", count: 4, createdAt: createdAtTime, updatedAt: createdAtTime },
+                { id: 1, authorId: 1, letter: "b", count: 6, createdAt: createdAtTime, updatedAt: createdAtTime },
             ]);
             const letterStatistics: LetterStatistic[] = await statisticController.getLetterStatictics(db, [1]);
             expect(letterStatistics).toEqual([{ a: 40 }, { b: 60 }]);

@@ -1,7 +1,7 @@
 import { Database } from "sqlite3";
-import { AuthorsError } from "../utils/customErrorClasses/authorsError.class";
-import { getAllAuthors, getTenAuthors } from "../model/author.model";
-import { RenderObject } from "../types/renderObject.type";
+import { AuthorsError } from "../utils/customErrorClasses/authorsError.class.js";
+import { getAllAuthors, getTenAuthors } from "../model/author.model.js";
+import { RenderObject } from "../types/renderObject.type.js";
 
 export const authorsController = async (db: Database, page: number): Promise<RenderObject> => {
     try {

@@ -1,12 +1,12 @@
 import sqlite3, { Database } from "sqlite3";
-import { SqlParams } from "../types/sqlparams.type";
+import { SqlParams } from "../types/sqlparams.type.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
 // Initialize database
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const dbFilePath = path.join(__dirname, "DiscordMessages.db");
+const dbFilePath = path.join(__dirname, 'DiscordMessages.db');
 export const db = new sqlite3.Database(dbFilePath);
 
 export const execute = async (db: Database, sql: string, params: SqlParams = []): Promise<void> => {
