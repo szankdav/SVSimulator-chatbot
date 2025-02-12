@@ -1,0 +1,11 @@
+# flyctl launch added from .gitignore
+**\node_modules
+**\.env
+**\DiscordMessages.db
+
+# Playwright
+test-results
+playwright-report
+blob-report
+playwright\.cache
+fly.toml
