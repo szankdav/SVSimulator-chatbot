@@ -28,7 +28,7 @@ if (process.env.NODE_ENV === "devDb") {
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
-app.get("/home", homeHandler);
+app.get("/", homeHandler);
 app.get("/authors/:page", authorsHandler);
 app.get("/messages/:page", messagesHandler);
 app.get("/messages/author/:id", messagesByAuthorsHandler);
