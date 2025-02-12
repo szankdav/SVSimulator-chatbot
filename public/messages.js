@@ -1,6 +1,6 @@
 "use strict";
 
-const pageURL = "http://localhost:3000/messages";
+const pageURL = "/messages";
 const previousButton = document.getElementById("previousButton");
 const nextButton = document.getElementById("nextButton");
 const firstPageNumberButton = document.getElementById("firstPageNumberButton");
@@ -73,6 +73,6 @@ document.addEventListener("DOMContentLoaded", () => {
 const authorNameTds = document.getElementsByClassName("authorName");
 for (let i = 0; i < authorNameTds.length; i++) {
     authorNameTds[i].addEventListener("click", () => {
-        window.location = `http://localhost:3000/messages/author/${authorNameTds[i].dataset.authorid}`;
+        window.location = `/messages/author/${authorNameTds[i].dataset.authorid}`;
     })    
 }
