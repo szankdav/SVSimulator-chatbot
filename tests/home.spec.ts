@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test('/home page should display the correct title and text', async ({ page }) => {
-  await page.goto('http://localhost:3000/home');
+  await page.goto('http://localhost:3000/');
   await expect(page).toHaveTitle("Discord logger statisztika");
   await expect(page.locator('h1')).toHaveText('Welcome to Discord Logger!');
   await expect(page.locator('h3')).toHaveText('Here you can find all of the users that ever sent a message on your server.');

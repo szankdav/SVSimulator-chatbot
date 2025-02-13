@@ -22,7 +22,11 @@
                 </div>
                 <div class="col-12 mt-3">
                     <h4>Author:</h4>
-                    <p data-testid="id">ID: <%if(author.id){%><%= author.id %><%}else{%><%= "-"%><%}%>
+                    <p data-testid="id">ID: <%if(author.id){%>
+                            <%= author.id %>
+                                <%}else{%>
+                                    <%= "-" %>
+                                        <%}%>
                     </p>
                     <p data-testid="name">Name: <%= author.name %>
                     </p>
@@ -30,12 +34,22 @@
                     </p>
                 </div>
                 <div class="col-12 d-grid gap-2 d-md-block">
-                    <a class="btn btn-success" href="/messages/author/<%= author.id%>">Go back to
-                        author</a>
-                    <button id="seeStatistics" class="btn btn-success">Show statistics</button>
+                    <%if(author.id){%><a class="btn btn-success" href="/messages/author/<%= author.id%>">Go back to
+                            author</a>
+                        <%}%>
+                            <%if(author.id){%><button id="seeStatistics" class="btn btn-success">Show
+                                    statistics</button>
+                                <%}%>
                 </div>
                 <div id="statistics" class="col-12 mt-3 d-none">
-                    <h4><%if(author.id){%><%= "Here you can see the usage rate of each letter out of all the letters typed by the author:" %><%}else{%><%= "-"%><%}%></h4>
+                    <h4>
+                        <%if(author.id){%>
+                            <%= "Here you can see the usage rate of each letter out of all the letters typed by the author:"
+                                %>
+                                <%}else{%>
+                                    <%= "-" %>
+                                        <%}%>
+                    </h4>
                     <% letterStatistics.forEach(stat=> { %>
                         <% Object.entries(stat).forEach(([letter, percent])=> { %>
                             <p class="mt-2">
@@ -43,12 +57,13 @@
                             </p>
                             <div class="progress" role="progressbar" aria-label="Basic example"
                                 aria-valuenow="<%= percent %>" aria-valuemin="0" aria-valuemax="100">
-                                <div <% /* eslint-disable css-propertyvalueexpected */ %> class="progress-bar" style="width: <%= percent %>%"></div>
+                                <div <% /* eslint-disable css-propertyvalueexpected */ %> class="progress-bar"
+                                    style="width: <%= percent %>%"></div>
                             </div>
                             <% }); %>
                                 <% }); %>
                 </div>
-                <div  class="col-12 mt-3">
+                <div class="col-12 mt-3">
                     <table class="table table-striped">
                         <thead>
                             <th>ID</th>
