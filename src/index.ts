@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 import { createTables } from "./logger/database/tables.js";
 import { db } from "./logger/database/database.js";
 import { errorHandler } from "./logger/handlers/error.handler.js";
-import { fillDatabaseWithFakeData } from "./logger/database/faker/dataFaker.js";
+//import { fillDatabaseWithFakeData } from "./logger/database/faker/dataFaker.js";
 import { homeHandler } from "./logger/handlers/home.handler.js";
 import { authorsHandler } from "./logger/handlers/authors.handler.js";
 import { messagesHandler, messagesByAuthorsHandler } from "./logger/handlers/messages.handler.js";
@@ -30,9 +30,9 @@ const port = process.env.PORT || 3000;
 await createTables(db);
 
 // Create fake datas for database
-if (process.env.NODE_ENV === "devDb") {
-    await fillDatabaseWithFakeData(db);
-}
+// if (process.env.NODE_ENV === "devDb") {
+//     await fillDatabaseWithFakeData(db);
+// }
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);

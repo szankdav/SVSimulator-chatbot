@@ -21,12 +21,12 @@
             <div class="row mt-3">
                 <div class="col-12 d-flex">
                     <div class="me-3">
-                        <a class="btn btn-success" href="/authors/1">Go back
+                        <a class="btn btn-success" data-testid="goBackToAuthors" href="/authors/1">Go back
                             to
                             authors</a>
                     </div>
                     <div>
-                        <a data-testid="goBack" href="/messages/1" class="btn btn-success">Go back to
+                        <a data-testid="goBackToMessages" href="/messages/1" class="btn btn-success">Go back to
                             messages</a>
                     </div>
                 </div>
@@ -40,7 +40,7 @@
                     </p>
                 </div>
                 <div>
-                    <a class="btn btn-success" href="/statistics/author/<%=author.id%>">Go to
+                    <a data-testid="goToAuthorStatistics" class="btn btn-success" href="/statistics/author/<%=author.id%>">Go to
                         author's statistics</a>
                 </div>
                 <div class="col-12 mt-3">

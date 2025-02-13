@@ -5,14 +5,15 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "devDb": "NODE_ENV=devDb tsx watch src/index.ts",
+    "devDb": "tsx src/scripts/devDb.ts || node dist/scripts/devDb.js",
+    "emptyDevDb":"tsx src/scripts/emptyDevDb.ts || node dist/scripts/emptyDevDb.js",
     "dev": "tsx watch src/index.ts",
-    "start": "node dist/index.js",
     "copyfiles": "copyfiles -u 1 \"src/logger/view/**/*\" \"dist/\"",
     "copy-public": "copyfiles -u 1 \"src/public/*\" \"dist/public\"",
     "build": "tsup --external express && npm run copyfiles && npm run copy-public",
     "test": "npx vitest",
-    "playwright": "npx playwright test --ui"
+    "playwright": "npm run devDb && npx playwright test && npm run emptyDevDb",
+    "start": "node dist/index.js"
   },
   "author": "",
   "license": "ISC",

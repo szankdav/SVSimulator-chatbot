@@ -69,3 +69,14 @@ export const getTenAuthors = async (db: Database, params: SqlParams): Promise<Au
         throw new Error("Error fetching ten authors");
     }
 }
+
+export const deleteAllAuthors = async (db: Database): Promise<void> => {
+    await execute(db, "PRAGMA foreign_keys = ON;");
+    const sql = `DELETE FROM Authors`;
+    try {
+        const rows = await execute(db, sql);
+    } catch (error) {
+        console.error("Error deleting authors:", error);
+        throw new Error("Error deleting authors");
+    }
+}

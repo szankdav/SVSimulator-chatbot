@@ -25,10 +25,9 @@ const updatePagination = (pageNumber) => {
 
   pageNumber = Math.max(1, Math.min(pageNumber, maxPageNumber));
 
-  firstPageNumberButton.innerText = pageNumber > 1 ? pageNumber - 1 : "";
-  if(pageNumber === 1){firstPageNumberButton?.classList.add("d-none")};
-  secondPageNumberButton.innerText = pageNumber;
-  thirdPageNumberButton.innerText =
+  firstPageNumberButton.innerText = pageNumber > 1 ? pageNumber - 1 : 1;
+  secondPageNumberButton.innerText = pageNumber === 1 ? pageNumber + 1 : pageNumber;
+  thirdPageNumberButton.innerText = pageNumber === 1 ? pageNumber + 2 :
     pageNumber < maxPageNumber ? pageNumber + 1 : "";
   if(pageNumber === maxPageNumber){thirdPageNumberButton?.classList.add("d-none")};
   firstPageNumberButton.href = `${pageURL}/${firstPageNumberButton?.innerText}`;

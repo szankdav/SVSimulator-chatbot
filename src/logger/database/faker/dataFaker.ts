@@ -1,6 +1,7 @@
 import { fakerHU } from '@faker-js/faker';
 import { Database } from 'sqlite3';
 import { execute, fetchAll } from "../database.js";
+import { db } from "../database.js";
 
 const createFakeAuthors = (): string[] => {
     const fakeAuthors: string[] = [];
@@ -69,7 +70,7 @@ const updateLetterCounters = async (db: Database, letterCountMap: Map<string, nu
     }
 };
 
-export const fillDatabaseWithFakeData = async (db: Database): Promise<void> => {
+const fillDatabaseWithFakeData = async (db: Database): Promise<void> => {
     try {
         const fakeAuthors = createFakeAuthors();
         await insertAuthors(db, fakeAuthors);
@@ -85,3 +86,9 @@ export const fillDatabaseWithFakeData = async (db: Database): Promise<void> => {
         console.error(error);
     }
 };
+
+export const runFaker = async () => {
+    await fillDatabaseWithFakeData(db);
+} 
+
+// "devDb": "NODE_ENV=devDb tsx watch src/index.ts",
