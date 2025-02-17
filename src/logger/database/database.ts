@@ -9,9 +9,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 let dbFolder: string;
-console.log("Checking if /data exists:", fs.existsSync("/data"));
-if (fs.existsSync("/data")) {
-    dbFolder = "/data";
+console.log("Checking if /database exists:", fs.existsSync("/database"));
+if (fs.existsSync("/database")) {
+    dbFolder = "/database";
   } else {
     dbFolder = __dirname
   }
