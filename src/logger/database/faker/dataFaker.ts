@@ -80,7 +80,6 @@ const fillDatabaseWithFakeData = async (db: Database): Promise<void> => {
 
         const letterCountMap = new Map<string, number>();
         await insertMessages(db, authors, letterCountMap);
-
         await updateLetterCounters(db, letterCountMap);
     } catch (error) {
         console.error(error);
