@@ -28,8 +28,11 @@ export async function createMessage(message: OmitPartialGroupDMChannel<Message<b
 
 export async function answerBotMention(message: OmitPartialGroupDMChannel<Message<boolean>>) {
   if (message.author.bot) return;
-
-  if (message.mentions.users.has("1328702124413943830")) {
+  const user = message.mentions.users.first();
+  if (user === undefined) {
+    return;
+  }
+  if (user.username === "SVSimulator Sven") {
     message.channel.send(`Szia ${message.author}!`);
     message.channel.send(`Az elérhető parancsaimat a "/" jellel tudod előhozni! :)`);
   }
