@@ -23,12 +23,12 @@ app.set("views", path.join(__dirname, 'logger/view'));
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use(express.json())
-const port = process.env.PORT || 3000;
+const port = Number(process.env.PORT) || 3000;
 
 // Create tables
 await createTables(db);
 
-app.listen(`0.0.0.0:${port}`, () => {
+app.listen(port, "0.0.0.0", () => {
     console.log(`Server running at http://localhost:${port}`);
 });
 
