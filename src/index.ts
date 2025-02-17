@@ -28,7 +28,7 @@ const port = process.env.PORT || 3000;
 // Create tables
 await createTables(db);
 
-app.listen(port, () => {
+app.listen(`0.0.0.0:${port}`, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
 
