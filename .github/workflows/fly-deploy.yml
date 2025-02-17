@@ -18,6 +18,8 @@ jobs:
         run: npm ci
       - name: Build the app
         run: npm run build
+      - name: List files in root directory
+        run: ls -l /
       - name: Start the app in the background
         env:
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
