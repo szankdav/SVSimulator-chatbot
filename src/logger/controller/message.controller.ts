@@ -1,25 +1,52 @@
 import { Database } from "sqlite3";
-import { getAllMessages, createMessage, MessageModel } from "../model/message.model";
-import { SqlParams } from "../types/sqlparams.type";
-import { DatabaseError } from "../middleware/databaseError.handler";
+import { getAllMessages, getTenMessages, getMessagesByAuthorId } from "../model/message.model.js";
+import { SqlParams } from "../types/sqlparams.type.js";
+import { MessagesError } from "../utils/customErrorClasses/messagesError.class.js";
+import { RenderObject } from "../types/renderObject.type.js";
+import { getAllAuthors, getAuthorById } from "../model/author.model.js";
 
-export const createMessageController = async (db: Database, messageParams: MessageModel): Promise<void> => {
+export const messagesController = async (db: Database, page: number): Promise<RenderObject> => {
     try {
-        // Kell-e vizsgalni arra, hogy a bejovo adat nem ures, ha tudjuk, hogy ilyen nem fordulhat elo?
-        const params: SqlParams = [messageParams.authorId, messageParams.content, messageParams.messageCreatedAt];
-        await createMessage(db, params);
-        console.log('Message added to the database!');
+        if (isNaN(page)) { 
+            const renderObject: RenderObject = { viewName: "error", options: { err: "Page not found!" } } 
+            return renderObject; 
+        }
+        const messagesPageNumber = Math.ceil((await getAllMessages(db)).length / 10);
+        const messagesSlicedByTen = await getTenMessages(db, [page === 1 ? 0 : (page - 1) * 10]);
+        const authors = await getAllAuthors(db);
+        let error: string = "";
+        if (page > messagesPageNumber) { error = "No messages to show... Are you sure you are at the right URL?" };
+
+        let renderObject: RenderObject = {
+            viewName: "messages",
+            options: { messagesPageNumber, authors, messagesSlicedByTen, error }
+        };
+
+
+        return renderObject;
     } catch (error) {
-        console.error("Error creating message:", error);
-        throw new DatabaseError("Error creating message", 500);
+        console.error("Error creating messages renderObject:", error);
+        throw new MessagesError("Error fetching messages!", 500);
     }
 }
 
-export const getAllMessagesController = async (db: Database):Promise<MessageModel[]> => {
+export const messagesByAuthorsController = async (db: Database, params: SqlParams): Promise<RenderObject> => {
     try {
-        return await getAllMessages(db);
+        let author = await getAuthorById(db, params);
+        let messages = await getMessagesByAuthorId(db, params);
+        if (!author) { 
+            author = { id: 0, name: "-", createdAt: "-" };
+            messages = []; 
+        };
+
+        let renderObject: RenderObject = {
+            viewName: "author",
+            options: { author, messages }
+        };
+
+        return renderObject;
     } catch (error) {
-        console.error("Error fetching all messages:", error);
-        throw new DatabaseError("Error fetching all messages", 500);
+        console.error("Error creating messages renderObject:", error);
+        throw new MessagesError("Error fetching messages!", 500);
     }
 }

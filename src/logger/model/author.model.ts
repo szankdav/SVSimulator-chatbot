@@ -43,3 +43,40 @@ export const getAuthorByName = async (db: Database, params: SqlParams): Promise<
         throw new Error("Error fetching author");
     }
 }
+
+export const getAuthorById = async(db: Database, params: SqlParams): Promise<AuthorModel | undefined> => {
+    const sql = `SELECT * FROM Authors WHERE id = ?`;
+    try {
+        return await fetchFirst<{ id: number; name: string; createdAt: string }>(db, sql, params);
+    } catch (error) {
+        console.error("Error fetching author:", error);
+        throw new Error("Error fetching author");
+    }
+}
+
+export const getTenAuthors = async (db: Database, params: SqlParams): Promise<AuthorModel[]> => {
+    const sql = `SELECT * FROM Authors LIMIT 10 OFFSET ?`;
+    try {
+        const rows = await fetchAll<({ id: number; name: string; createdAt: string })>(db, sql, params);
+
+        return rows.map((row) => ({
+            id: row.id,
+            name: row.name,
+            createdAt: row.createdAt,
+        }))
+    } catch (error) {
+        console.error("Error fetching ten authors:", error);
+        throw new Error("Error fetching ten authors");
+    }
+}
+
+export const deleteAllAuthors = async (db: Database): Promise<void> => {
+    await execute(db, "PRAGMA foreign_keys = ON;");
+    const sql = `DELETE FROM Authors`;
+    try {
+        const rows = await execute(db, sql);
+    } catch (error) {
+        console.error("Error deleting authors:", error);
+        throw new Error("Error deleting authors");
+    }
+}

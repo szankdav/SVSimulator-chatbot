@@ -1,13 +1,16 @@
-import { startClient } from "./bot/client/client";
-import express, { NextFunction, Request, Response } from 'express';
+import { startClient } from "./bot/client/client.js";
+import express from 'express';
 import path from "path";
 import { fileURLToPath } from "url";
-import { createTables } from "./logger/database/tables";
-import { getAllMessagesController } from "./logger/controller/message.controller";
-import { getAllLetterCountersAuthorsController, getAllLetterCountersController } from "./logger/controller/letterCounter.controller";
-import { db } from "./logger/database/database";
-import { globalErrorHandler } from "./logger/middleware/globalError.handler";
-import { getAllAuthorsController } from "./logger/controller/author.controller";
+import { createTables } from "./logger/database/tables.js";
+import { db } from "./logger/database/database.js";
+import { errorHandler } from "./logger/handlers/error.handler.js";
+//import { fillDatabaseWithFakeData } from "./logger/database/faker/dataFaker.js";
+import { homeHandler } from "./logger/handlers/home.handler.js";
+import { authorsHandler } from "./logger/handlers/authors.handler.js";
+import { messagesHandler, messagesByAuthorsHandler } from "./logger/handlers/messages.handler.js";
+import { statisticsByAuthorHandler } from "./logger/handlers/statistics.handler.js";
+import { messageLoggerHandler } from "./logger/handlers/messageLogger.handler.js";
 
 // Start bot
 startClient();
@@ -17,36 +20,28 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, '/logger/view'));
+app.set("views", path.join(__dirname, 'logger/view'));
 app.use(express.static(path.join(__dirname, '../public')));
-app.use(globalErrorHandler);
+app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.json())
 const port = process.env.PORT || 3000;
 
 // Create tables
 await createTables(db);
 
+// Create fake datas for database
+// if (process.env.NODE_ENV === "devDb") {
+//     await fillDatabaseWithFakeData(db);
+// }
+
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
 
-app.get('/', async (req: Request, res: Response, next: NextFunction) => {
-    // Get datas for render
-    try {
-        const messages = await getAllMessagesController(db);
-        const letters = await getAllLetterCountersController(db);
-        const authors = await getAllLetterCountersAuthorsController(db);
-        res.render("index", { messages, letters, authors });
-    } catch (error) {
-        next(error);
-    }
-});
-
-app.get('/authors', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const messages = await getAllMessagesController(db);
-        const authors = await getAllAuthorsController(db);
-        res.render("authors", { messages, authors });
-    } catch (error) {
-        next(error);
-    }
-})
+app.get('/', homeHandler);
+app.get('/authors/:page', authorsHandler);
+app.get('/messages/:page', messagesHandler);
+app.get('/messages/author/:id', messagesByAuthorsHandler);
+app.get('/statistics/author/:id', statisticsByAuthorHandler);
+app.post('/logMessage', messageLoggerHandler);
+app.use(errorHandler);

@@ -1,18 +1,18 @@
 import { beforeEach, vi, describe, it, expect, afterEach } from "vitest";
-import * as messageCounterController from "./message.controller.ts";
-import * as messageCounterModel from "../model/message.model.ts";
-import * as authorController from "../controller/author.controller.ts";
-import * as messageController from "../controller/message.controller.ts";
-import { createTables } from "../database/tables.ts";
+import * as authorModel from "../model/author.model";
+import * as messageModel from "../model/message.model";
+import { createTables } from "../database/tables";
 import sqlite3, { Database } from "sqlite3";
-import { MessageModel } from "../model/message.model.ts";
-import { DatabaseError } from "../middleware/databaseError.handler.ts";
-import { AuthorModel } from "../model/author.model.ts";
+import { MessagesError } from "../utils/customErrorClasses/messagesError.class";
+import * as messagesController from "../controller/message.controller";
+import { AuthorModel } from "../model/author.model";
+import { MessageModel } from "../model/message.model";
+import { RenderObject } from "../types/renderObject.type";
 
 let db: Database;
 const createdAtTime = new Date().toLocaleString();
 
-describe("messageController tests", () => {
+describe("message.controller tests", () => {
     beforeEach(async () => {
         vi.clearAllMocks();
         vi.spyOn(console, 'error').mockImplementation(() => { });
@@ -21,12 +21,14 @@ describe("messageController tests", () => {
         await createTables(db);
         const testAuthor1: AuthorModel = { id: 1, name: "Teszt Elek", createdAt: createdAtTime };
         const testAuthor2: AuthorModel = { id: 2, name: "Teszt Elekné", createdAt: createdAtTime };
-        await authorController.createAuthorController(db, testAuthor1);
-        await authorController.createAuthorController(db, testAuthor2);
+        await authorModel.createAuthor(db, [testAuthor1.name, testAuthor1.createdAt]);
+        await authorModel.createAuthor(db, [testAuthor2.name, testAuthor2.createdAt]);
         const testMessage1: MessageModel = { id: 1, authorId: 1, content: "Teszt", messageCreatedAt: createdAtTime };
         const testMessage2: MessageModel = { id: 2, authorId: 2, content: "Teszt", messageCreatedAt: createdAtTime };
-        await messageController.createMessageController(db, testMessage1);
-        await messageController.createMessageController(db, testMessage2);
+        const testMessage3: MessageModel = { id: 3, authorId: 1, content: "Teszt", messageCreatedAt: createdAtTime };
+        await messageModel.createMessage(db, [testMessage1.authorId, testMessage1.content, testMessage1.messageCreatedAt]);
+        await messageModel.createMessage(db, [testMessage2.authorId, testMessage2.content, testMessage2.messageCreatedAt]);
+        await messageModel.createMessage(db, [testMessage3.authorId, testMessage3.content, testMessage3.messageCreatedAt]);
     });
 
     afterEach(() => {
@@ -34,50 +36,77 @@ describe("messageController tests", () => {
         vi.restoreAllMocks();
     });
 
-    describe("createMessageController tests", () => {
-        it("should create a new message", async () => {
-            const messageParams: MessageModel = { id: 1, authorId: 1, content: "Teszt", messageCreatedAt: createdAtTime };
-            vi.spyOn(messageCounterController, 'createMessageController');
+    describe('messagesController tests', () => {
+        it('should return with a valid renderObject if data is valid', async () => {
+            vi.spyOn(messagesController, 'messagesController');
+            const renderObject: RenderObject = await messagesController.messagesController(db, 1);
+            const testAuthor1: AuthorModel = { id: 1, name: "Teszt Elek", createdAt: createdAtTime };
+            const testAuthor2: AuthorModel = { id: 2, name: "Teszt Elekné", createdAt: createdAtTime };
+            const testMessage1: MessageModel = { id: 1, authorId: 1, content: "Teszt", messageCreatedAt: createdAtTime };
+            const testMessage2: MessageModel = { id: 2, authorId: 2, content: "Teszt", messageCreatedAt: createdAtTime };
+            const testMessage3: MessageModel = { id: 3, authorId: 1, content: "Teszt", messageCreatedAt: createdAtTime };
 
-            await messageCounterController.createMessageController(db, messageParams);
-            expect(messageCounterController.createMessageController).toHaveBeenCalledWith(db, messageParams);
-        });
+            expect(renderObject.viewName).toBe("messages");
+            const messagesPageNumber = 1;
+            const messagesSlicedByTen = [testMessage1, testMessage2, testMessage3];
+            const authors = [testAuthor1, testAuthor2];
+            const error = "";
 
-        it("should call createMessage with the correct params", async () => {
-            const messageParams: MessageModel = { id: 1, authorId: 1, content: "Teszt", messageCreatedAt: createdAtTime };
-            vi.spyOn(messageCounterModel, 'createMessage');
-
-            await messageCounterController.createMessageController(db, messageParams);
-            expect(messageCounterModel.createMessage).toHaveBeenCalledWith(db, [messageParams.authorId, messageParams.content, messageParams.messageCreatedAt]);
+            expect(renderObject.options).toStrictEqual({ messagesPageNumber, authors, messagesSlicedByTen, error });
         })
 
-        it("should throw an error with the correct message", async () => {
-            const messageParams: MessageModel = { id: 1, authorId: 1, content: "Teszt", messageCreatedAt: createdAtTime };
-            vi.spyOn(messageCounterController, 'createMessageController').mockRejectedValue(new DatabaseError("Error creating message", 500));
+        it('should return with a valid renderObject if data is not valid', async () => {
+            vi.spyOn(messagesController, 'messagesController');
+            const testAuthor1: AuthorModel = { id: 1, name: "Teszt Elek", createdAt: createdAtTime };
+            const testAuthor2: AuthorModel = { id: 2, name: "Teszt Elekné", createdAt: createdAtTime };
+            const renderObject: RenderObject = await messagesController.messagesController(db, 10);
+            expect(renderObject.viewName).toBe("messages");
+            const messagesPageNumber = 1;
+            const messagesSlicedByTen: [] = [];
+            const authors = [testAuthor1, testAuthor2];
+            const error = "No messages to show... Are you sure you are at the right URL?";
 
-            await expect(messageCounterController.createMessageController(db, messageParams)).rejects.toThrow(DatabaseError);
-            await expect(messageCounterController.createMessageController(db, messageParams)).rejects.toThrow("Error creating message");
+            expect(renderObject.options).toStrictEqual({ messagesPageNumber, authors, messagesSlicedByTen, error });
+        })
+
+        it('should throw an error with the correct message', async () => {
+            vi.spyOn(messagesController, 'messagesController').mockRejectedValue(new MessagesError("Error fetching messages!", 500));
+
+            await expect(messagesController.messagesController(db, 1)).rejects.toThrow(MessagesError);
+            await expect(messagesController.messagesController(db, 1)).rejects.toThrow("Error fetching messages!");
         })
     })
 
-    describe("getAllMessageController", () => {
-        it("should get all messages", async () => {
-            const testMessageParams1: MessageModel = { id: 1, authorId: 1, content: "Teszt", messageCreatedAt: createdAtTime };
-            const testMessageParams2: MessageModel = { id: 2, authorId: 2, content: "Teszt", messageCreatedAt: createdAtTime };
+    describe('messagesByAuthorsController tests', () => {
+        it('should return with a valid renderObject if data is valid', async () => {
+            vi.spyOn(messagesController, 'messagesByAuthorsController');
+            const renderObject: RenderObject = await messagesController.messagesByAuthorsController(db, [1]);
+            const testAuthor1: AuthorModel = { id: 1, name: "Teszt Elek", createdAt: createdAtTime };
+            const testMessage1: MessageModel = { id: 1, authorId: 1, content: "Teszt", messageCreatedAt: createdAtTime };
+            const testMessage3: MessageModel = { id: 3, authorId: 1, content: "Teszt", messageCreatedAt: createdAtTime };
 
-            await messageCounterController.createMessageController(db, testMessageParams1);
-            await messageCounterController.createMessageController(db, testMessageParams2);
-            const result = await messageCounterController.getAllMessagesController(db);
+            expect(renderObject.viewName).toBe("author");
+            const messages = [testMessage1, testMessage3];
+            const author = {id: testAuthor1.id, name: testAuthor1.name, createdAt: testAuthor1.createdAt};
 
-            expect(result[0].authorId).toBe(testMessageParams1.authorId);
-            expect(result[1].authorId).toBe(testMessageParams2.authorId);
+            expect(renderObject.options).toStrictEqual({ author, messages });
         })
 
-        it("should throw an error with the correct message", async () => {
-            vi.spyOn(messageCounterController, 'getAllMessagesController').mockRejectedValue(new DatabaseError("Error fetching all messages", 500));
+        it('should return with a valid renderObject if data is not valid', async () => {
+            vi.spyOn(messagesController, 'messagesByAuthorsController');
+            const renderObject: RenderObject = await messagesController.messagesByAuthorsController(db, [10]);
+            expect(renderObject.viewName).toBe("author");
+            const messages: [] = [];
+            const author = {id: 0, name: "-", createdAt: "-"};
 
-            await expect(messageCounterController.getAllMessagesController).rejects.toThrow(DatabaseError);
-            await expect(messageCounterController.getAllMessagesController).rejects.toThrow("Error fetching all messages");
+            expect(renderObject.options).toStrictEqual({ author, messages });
+        })
+
+        it('should throw an error with the correct message', async () => {
+            vi.spyOn(messagesController, 'messagesByAuthorsController').mockRejectedValue(new MessagesError("Error fetching messages!", 500));
+
+            await expect(messagesController.messagesByAuthorsController(db, [1])).rejects.toThrow(MessagesError);
+            await expect(messagesController.messagesByAuthorsController(db, [1])).rejects.toThrow("Error fetching messages!");
         })
     })
 });

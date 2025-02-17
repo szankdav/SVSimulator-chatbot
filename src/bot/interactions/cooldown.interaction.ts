@@ -1,5 +1,5 @@
 import { CacheType, Collection, Interaction, MessageFlags } from "discord.js";
-import { commands } from "../commands/utility";
+import { commands } from "../commands/utility/index.js";
 
 const cooldowns = new Collection<string, Collection<string, number>>();
 

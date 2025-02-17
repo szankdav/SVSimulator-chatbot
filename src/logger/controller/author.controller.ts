@@ -1,37 +1,27 @@
 import { Database } from "sqlite3";
-import { SqlParams } from "../types/sqlparams.type";
-import { DatabaseError } from "../middleware/databaseError.handler";
-import { AuthorModel, createAuthor, getAllAuthors, getAuthorByName } from "../model/author.model";
+import { AuthorsError } from "../utils/customErrorClasses/authorsError.class.js";
+import { getAllAuthors, getTenAuthors } from "../model/author.model.js";
+import { RenderObject } from "../types/renderObject.type.js";
 
-export const createAuthorController = async (db: Database, authorParams: AuthorModel): Promise<void> => {
+export const authorsController = async (db: Database, page: number): Promise<RenderObject> => {
     try {
-        const params: SqlParams = [authorParams.name, authorParams.createdAt];
-        const existingAuthor = await getAuthorByName(db, [authorParams.name]);
-        if (!existingAuthor) {
-            await createAuthor(db, params);
-            console.log('Author added to the database!');
+        if (isNaN(page)) { 
+            const renderObject: RenderObject = { viewName: "error", options: { err: "Page not found!" } } 
+            return renderObject; 
         }
-    } catch (error) {
-        console.error("Error creating author:", error);
-        throw new DatabaseError("Error creating author", 500);
-    }
-}
+        const authorsPageNumber = Math.ceil((await getAllAuthors(db)).length / 10);
+        const authorsSlicedByTen = await getTenAuthors(db, [page == 1 ? 0 : (page - 1) * 10]);
+        let error: string = "";
+        if (page > authorsPageNumber) { error = "No authors to show... Are you sure you are at the right URL?" };
 
-export const getAllAuthorsController = async (db: Database): Promise<AuthorModel[]> => {
-    try {
-        return await getAllAuthors(db);
-    } catch (error) {
-        console.error("Error fetching all authors:", error);
-        throw new DatabaseError("Error fetching all authors", 500);
-    }
-}
+        let renderObject: RenderObject = {
+            viewName: "authors",
+            options: { authorsPageNumber, authorsSlicedByTen, error }
+        };
 
-export const getAuthorByNameController = async (db: Database, name: string): Promise<AuthorModel | undefined> => {
-    try {
-        const params: SqlParams = [name];
-        return await getAuthorByName(db, params);
+        return renderObject;
     } catch (error) {
-        console.error("Error fetching author:", error);
-        throw new DatabaseError("Error fetching author", 500);
+        console.error("Error creating authors renderObject:", error);
+        throw new AuthorsError("Error fetching authors!", 500);
     }
 }

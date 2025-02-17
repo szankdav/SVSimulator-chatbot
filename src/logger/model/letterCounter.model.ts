@@ -7,12 +7,12 @@ export type LetterModel = {
     authorId: number;
     letter: string;
     count: number;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export const updateLetterCounter = async (db: Database, params: SqlParams): Promise<void> => {
-    const sql = `UPDATE Letters SET count = count + 1 WHERE authorId = ? AND letter = ?`;
+    const sql = `UPDATE Letters SET count = count + 1, updatedAt = ? WHERE authorId = ? AND letter = ?`;
     try {
         await execute(db, sql, params);
     } catch (error) {
@@ -48,8 +48,8 @@ export const getAllLetterCounters = async (db: Database): Promise<LetterModel[]>
             authorId: row.authorId,
             letter: row.letter,
             count: row.count,
-            createdAt: new Date(row.createdAt),
-            updatedAt: new Date(row.updatedAt),
+            createdAt: row.createdAt,
+            updatedAt: row.updatedAt,
         }));
     } catch (error) {
         console.error("Error fetching all letters:", error);
@@ -66,6 +66,32 @@ export const getAllLetterCountersAuthors = async (db: Database): Promise<{ autho
         throw new Error("Error fetching all authors");
     }
 };
+
+export const getLetterCountersByAuthorId = async (db: Database, params: SqlParams): Promise<LetterModel[]> => {
+    const sql = `SELECT * FROM Letters WHERE authorId = ?`;
+    try {
+        const rows = await fetchAll<{
+            id: number;
+            authorId: number;
+            letter: string;
+            count: number;
+            createdAt: string;
+            updatedAt: string;
+        }>(db, sql, params);
+
+        return rows.map((row) => ({
+            id: row.id,
+            authorId: row.authorId,
+            letter: row.letter,
+            count: row.count,
+            createdAt: row.createdAt,
+            updatedAt: row.updatedAt,
+        }));
+    } catch (error) {
+        console.error("Error fetching letter counters:", error);
+        throw new Error("Error fetching letter counters");
+    }
+}
 
 export const createLetterCounters = async (db: Database, params: SqlParams): Promise<void> => {
     const alphabet: string[] = [

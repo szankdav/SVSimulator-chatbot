@@ -1,2 +1,10 @@
 node_modules
 .env
+DiscordMessages.db
+dist
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
