@@ -45,10 +45,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
+      - name: Set Fly.io secrets
+        run: |
+          flyctl secrets set \
+            DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} \
+            DISCORD_CLIENT_ID=${{ secrets.DISCORD_CLIENT_ID }} \
+            GUILD_ID=${{ secrets.GUILD_ID }} \
+            PORT=${{ secrets.PORT }}
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       - run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
-          DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
-          GUILD_ID: ${{ secrets.GUILD_ID }}
-          PORT: ${{ secrets.PORT }}
