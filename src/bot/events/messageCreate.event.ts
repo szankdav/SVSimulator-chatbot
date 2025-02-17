@@ -1,14 +1,19 @@
-import { Message, OmitPartialGroupDMChannel } from "discord.js";
+import { Collection, Message, OmitPartialGroupDMChannel, User } from "discord.js";
 
 export async function createMessage(message: OmitPartialGroupDMChannel<Message<boolean>>) {
   try {
     if (message.author.bot) return;
     if (message.content.startsWith('<@')) return;
+    let messageWithoutMemberId :string = message.content;
+    const mentionedUsers: Collection<string, User> = message.mentions.users;
+    for (const user of mentionedUsers) {
+      messageWithoutMemberId = messageWithoutMemberId.replace(`<@${user[0]}>`, user[1].username);
+    }
 
     const messageData = {
       username: message.author.globalName,
       messageCreatedAt: message.createdTimestamp,
-      content: message.content,
+      content: messageWithoutMemberId,
     }
 
     const result = await fetch("http://localhost:3000/logMessage", {
