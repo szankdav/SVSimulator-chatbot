@@ -5,7 +5,7 @@ import { logger } from "../../winston/winston.js";
 
 const commandsData = Object.values(commands).map((command) => command.data);
 
-const rest = new REST({ version: "10" }).setToken(config.DISCORD_TOKEN_DEV);
+const rest = new REST({ version: "10" }).setToken(config.DISCORD_TOKEN);
 
 export async function deployCommands() {
   try {
@@ -13,7 +13,7 @@ export async function deployCommands() {
     logger.info("Started refreshing application (/) commands.");
 
     await rest.put(
-      Routes.applicationGuildCommands(config.DISCORD_CLIENT_ID_DEV, config.GUILD_ID_DEV),
+      Routes.applicationGuildCommands(config.DISCORD_CLIENT_ID, config.GUILD_ID),
       {
         body: commandsData,
       }

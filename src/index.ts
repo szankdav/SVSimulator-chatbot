@@ -10,6 +10,7 @@ import { authorsHandler } from "./logger/handlers/authors.handler.js";
 import { messagesHandler, messagesByAuthorsHandler } from "./logger/handlers/messages.handler.js";
 import { statisticsByAuthorHandler } from "./logger/handlers/statistics.handler.js";
 import { messageLoggerHandler } from "./logger/handlers/messageLogger.handler.js";
+import { logger } from "./winston/winston.js";
 
 // Start bot
 startClient();
@@ -28,6 +29,7 @@ const port = Number(process.env.PORT) || 3000;
 await createTables(db);
 
 app.listen(port, "0.0.0.0", () => {
+    logger.info(`Server running at http://localhost:${port}`);
     console.log(`Server running at http://localhost:${port}`);
 });
 

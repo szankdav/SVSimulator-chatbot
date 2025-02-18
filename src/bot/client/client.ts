@@ -26,5 +26,5 @@ client.on("messageCreate", async (message) => {
 })
 
 export function startClient() {
-  client.login(config.DISCORD_TOKEN_DEV);
+  client.login(config.DISCORD_TOKEN);
 }
