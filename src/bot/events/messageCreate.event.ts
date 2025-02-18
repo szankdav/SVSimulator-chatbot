@@ -1,5 +1,5 @@
 import { Collection, Message, OmitPartialGroupDMChannel, User } from "discord.js";
-import { logger } from "../../winston/winston";
+import { logger } from "../../winston/winston.js";
 
 export async function createMessage(message: OmitPartialGroupDMChannel<Message<boolean>>) {
   try {
