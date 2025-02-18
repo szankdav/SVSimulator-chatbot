@@ -1,6 +1,7 @@
 import { Database } from "sqlite3";
 import { execute, fetchAll } from "../database/database.js";
 import { SqlParams } from "../types/sqlparams.type.js";
+import { logger } from "../../winston/winston.js";
 
 export type MessageModel = {
     id: number;
@@ -14,7 +15,7 @@ export const createMessage = async (db: Database, params: SqlParams): Promise<vo
     try {
         await execute(db, sql, params);
     } catch (error) {
-        console.error("Error creating message:", error);
+        logger.error("Error creating message:", error);
         throw new Error("Error creating message");
     }
 };
@@ -31,7 +32,7 @@ export const getAllMessages = async (db: Database): Promise<MessageModel[]> => {
             messageCreatedAt: row.createdAt,
         }));
     } catch (error) {
-        console.error("Error fetching all messages:", error);
+        logger.error("Error fetching all messages:", error);
         throw new Error("Error fetching all messages");
     }
 };
@@ -48,7 +49,7 @@ export const getMessagesByAuthorId = async (db: Database, params: SqlParams): Pr
             messageCreatedAt: row.createdAt,
         }));
     } catch (error) {
-        console.error("Error fetching messages by author id:", error);
+        logger.error("Error fetching messages by author id:", error);
         throw new Error("Error fetching messages by author id");
     }
 };
@@ -65,7 +66,7 @@ export const getTenMessages = async (db: Database, params: SqlParams): Promise<M
             messageCreatedAt: row.createdAt,
         }))
     } catch (error) {
-        console.error("Error fetching ten messages:", error);
+        logger.error("Error fetching ten messages:", error);
         throw new Error("Error fetching ten messages");
     }
 }

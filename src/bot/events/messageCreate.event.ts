@@ -14,6 +14,7 @@ export async function createMessage(message: OmitPartialGroupDMChannel<Message<b
       username: message.author.globalName,
       messageCreatedAt: message.createdTimestamp,
       content: messageWithoutMemberId,
+      content: messageWithoutMemberId,
     }
 
     const result = await fetch("http://localhost:3000/logMessage", {
@@ -24,10 +25,11 @@ export async function createMessage(message: OmitPartialGroupDMChannel<Message<b
       body: JSON.stringify({ message: messageData }),
     })
 
-    const response = await result.json();
-    console.log(response);
+    if (result.status === 200) {
+      logger.info(`Message logged by user: ${message.author.globalName}`)
+    }
   } catch (error) {
-    console.error("Error creating message:", error);
+    logger.error("Error creating message:", error);
   }
 }
 
@@ -40,5 +42,6 @@ export async function answerBotMention(message: OmitPartialGroupDMChannel<Messag
   if (user.username === "SVS-Sven") {
     message.channel.send(`Szia ${message.author}!`);
     message.channel.send(`Az elérhető parancsaimat a "/" jellel tudod előhozni! :)`);
+    logger.info(`SVSimulator Sven mentioned by: ${message.author}`);
   }
 }

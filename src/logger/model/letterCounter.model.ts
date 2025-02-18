@@ -1,6 +1,7 @@
 import { Database } from "sqlite3";
 import { execute, fetchAll, fetchFirst } from "../database/database.js";
 import { SqlParams } from "../types/sqlparams.type.js";
+import { logger } from "../../winston/winston.js";
 
 export type LetterModel = {
     id: number;
@@ -16,7 +17,7 @@ export const updateLetterCounter = async (db: Database, params: SqlParams): Prom
     try {
         await execute(db, sql, params);
     } catch (error) {
-        console.error("Error updating letter count:", error);
+        logger.error("Error updating letter count:", error);
         throw new Error("Error updating letter count");
     }
 };
@@ -26,7 +27,7 @@ export const getLetterCounterByAuthorId = async (db: Database, params: SqlParams
     try {
         return await fetchFirst<{ authorId: number }>(db, sql, params);
     } catch (error) {
-        console.error("Error fetching authorId:", error);
+        logger.error("Error fetching authorId:", error);
         throw new Error("Error fetching authorId");
     }
 };
@@ -52,7 +53,7 @@ export const getAllLetterCounters = async (db: Database): Promise<LetterModel[]>
             updatedAt: row.updatedAt,
         }));
     } catch (error) {
-        console.error("Error fetching all letters:", error);
+        logger.error("Error fetching all letters:", error);
         throw new Error("Error fetching all letters");
     }
 };
@@ -62,7 +63,7 @@ export const getAllLetterCountersAuthors = async (db: Database): Promise<{ autho
     try {
         return await fetchAll<{ authorId: number }>(db, sql);
     } catch (error) {
-        console.error("Error fetching all authors:", error);
+        logger.error("Error fetching all authors:", error);
         throw new Error("Error fetching all authors");
     }
 };
@@ -88,7 +89,7 @@ export const getLetterCountersByAuthorId = async (db: Database, params: SqlParam
             updatedAt: row.updatedAt,
         }));
     } catch (error) {
-        console.error("Error fetching letter counters:", error);
+        logger.error("Error fetching letter counters:", error);
         throw new Error("Error fetching letter counters");
     }
 }
@@ -145,7 +146,7 @@ export const createLetterCounters = async (db: Database, params: SqlParams): Pro
             });
         });
     } catch (error) {
-        console.error("Error creating letters:", error);
+        logger.error("Error creating letters:", error);
         throw new Error("Error creating letters");
     }
 };

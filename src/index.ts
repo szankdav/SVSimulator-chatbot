@@ -25,7 +25,6 @@ app.use(express.static(path.join(__dirname, 'dist')));
 app.use(express.json())
 const port = Number(process.env.PORT) || 3000;
 
-// Create tables
 await createTables(db);
 
 app.listen(port, "0.0.0.0", () => {

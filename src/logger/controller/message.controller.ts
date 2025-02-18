@@ -4,6 +4,7 @@ import { SqlParams } from "../types/sqlparams.type.js";
 import { MessagesError } from "../utils/customErrorClasses/messagesError.class.js";
 import { RenderObject } from "../types/renderObject.type.js";
 import { getAllAuthors, getAuthorById } from "../model/author.model.js";
+import { logger } from "../../winston/winston.js";
 
 export const messagesController = async (db: Database, page: number): Promise<RenderObject> => {
     try {
@@ -25,7 +26,7 @@ export const messagesController = async (db: Database, page: number): Promise<Re
 
         return renderObject;
     } catch (error) {
-        console.error("Error creating messages renderObject:", error);
+        logger.error("Error creating messages renderObject:", error);
         throw new MessagesError("Error fetching messages!", 500);
     }
 }
@@ -46,7 +47,7 @@ export const messagesByAuthorsController = async (db: Database, params: SqlParam
 
         return renderObject;
     } catch (error) {
-        console.error("Error creating messages renderObject:", error);
+        logger.error("Error creating messages renderObject:", error);
         throw new MessagesError("Error fetching messages!", 500);
     }
 }

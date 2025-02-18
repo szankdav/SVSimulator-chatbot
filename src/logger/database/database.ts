@@ -3,13 +3,14 @@ import { SqlParams } from "../types/sqlparams.type.js";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
+import { logger } from "../../winston/winston.js";
 
 // Initialize database
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 let dbFolder: string;
-console.log("Checking if /database exists:", fs.existsSync("/database"));
+logger.info("Checking if /database exists:", fs.existsSync("/database"));
 if (fs.existsSync("/database")) {
     dbFolder = "/database";
   } else {
@@ -18,13 +19,13 @@ if (fs.existsSync("/database")) {
 
 const dbFilePath = path.join(dbFolder, 'DiscordMessages.db');
 
-console.log(`Using SQLite database at: ${dbFilePath}`);
+logger.info(`Using SQLite database at: ${dbFilePath}`);
 
 export const db = new sqlite3.Database(dbFilePath, (err) => {
     if (err) {
-      console.error("Failed to connect to database:", err);
+      logger.error("Failed to connect to database:", err);
     } else {
-      console.log("Connected to SQLite database successfully.");
+      logger.info("Connected to SQLite database successfully.");
     }
   });
 

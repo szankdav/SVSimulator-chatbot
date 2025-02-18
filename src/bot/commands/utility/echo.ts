@@ -1,4 +1,5 @@
 import { SlashCommandBuilder, ChannelType, PermissionFlagsBits, MessageFlags, CommandInteraction } from "discord.js";
+import { logger } from "../../../winston/winston.js";
 
 export const data = new SlashCommandBuilder()
     .setName("echo")
@@ -36,4 +37,5 @@ export async function execute(interaction: CommandInteraction) {
             flags: MessageFlags.Ephemeral,
         });
     }
+    logger.info(`Interaction: ${interaction.commandName} used by user: ${interaction.user.globalName}`);
 }

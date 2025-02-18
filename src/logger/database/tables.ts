@@ -1,5 +1,6 @@
 import { Database } from "sqlite3";
 import { execute } from "./database.js";
+import { logger } from "../../winston/winston.js";
 
 export const createAuthorsTable = async (db: Database): Promise<void> => {
     try {
@@ -11,7 +12,7 @@ export const createAuthorsTable = async (db: Database): Promise<void> => {
             createdAt TEXT NOT NULL)`
         );
     } catch (error) {
-        console.error("Error creating Authors table:", error);
+        logger.error("Error creating Authors table:", error);
     }
 };
 
@@ -27,7 +28,7 @@ export const createMessagesTable = async (db: Database): Promise<void> => {
             FOREIGN KEY (authorId) REFERENCES Authors(id) ON DELETE CASCADE)`
         );
     } catch (error) {
-        console.error("Error creating Messages table:", error);
+        logger.error("Error creating Messages table:", error);
     }
 };
 
@@ -45,7 +46,7 @@ export const createLettersTable = async (db: Database): Promise<void> => {
         FOREIGN KEY (authorId) REFERENCES Authors(id) ON DELETE CASCADE)`
         );
     } catch (error) {
-        console.error("Error creating Letters table:", error);
+        logger.error("Error creating Letters table:", error);
     }
 };
 
@@ -56,6 +57,6 @@ export const createTables = async (db: Database): Promise<void> => {
         await createMessagesTable(db);
         await createLettersTable(db);
     } catch (error) {
-        console.error("Error creating tables:", error);
+        logger.error("Error creating tables:", error);
     }
 };

@@ -3,6 +3,7 @@ import { config } from "../../config.js";
 import { deployCommands } from "./deploy-commands.js";
 import { cooldownForInteraction } from "../interactions/cooldown.interaction.js";
 import { createMessage, answerBotMention } from "../events/messageCreate.event.js"
+import { logger } from "../../winston/winston.js";
 
 const client = new Client({
   intents: ["Guilds", "GuildMessages", "DirectMessages", "MessageContent"],
@@ -11,6 +12,7 @@ const client = new Client({
 client.once("ready", async () => {
   await deployCommands();
   console.log("Discord bot is ready! 🤖");
+  logger.info("Discord bot is ready! 🤖");
 });
 
 client.on("interactionCreate", async (interaction) => {
@@ -24,5 +26,5 @@ client.on("messageCreate", async (message) => {
 })
 
 export function startClient() {
-  client.login(config.DISCORD_TOKEN);
+  client.login(config.DISCORD_TOKEN_DEV);
 }

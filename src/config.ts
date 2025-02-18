@@ -1,15 +1,17 @@
 import dotenv from "dotenv";
+import { logger } from "./winston/winston.js";
 
 dotenv.config();
 
-const { DISCORD_TOKEN, DISCORD_CLIENT_ID, GUILD_ID } = process.env;
+const { DISCORD_TOKEN_DEV, DISCORD_CLIENT_ID_DEV, GUILD_ID_DEV } = process.env;
 
-if (!DISCORD_TOKEN || !DISCORD_CLIENT_ID || !GUILD_ID) {
+if (!DISCORD_TOKEN_DEV || !DISCORD_CLIENT_ID_DEV || !GUILD_ID_DEV) {
+    logger.error("Missing environment variables");
     throw new Error("Missing environment variables");
 }
 
 export const config = {
-    DISCORD_TOKEN,
-    DISCORD_CLIENT_ID,
-    GUILD_ID,
+    DISCORD_TOKEN_DEV,
+    DISCORD_CLIENT_ID_DEV,
+    GUILD_ID_DEV,
 };
