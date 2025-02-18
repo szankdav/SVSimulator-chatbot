@@ -24,6 +24,7 @@ jobs:
           DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
           GUILD_ID: ${{ secrets.GUILD_ID }}
           PORT: ${{ secrets.PORT }}
+          LOG_LEVEL: ${{ secrets.LOG_LEVEL }}
         run: npm start &
       - name: Wait for the app to be ready
         run: npx wait-on http://localhost:3000
