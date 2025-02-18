@@ -27,22 +27,8 @@ const infoFilter = winston.format((info, opts) => {
     return info.level === 'info' ? info : false;
 });
 
-const httpFilter = winston.format((info, opts) => {
-    return info.level === 'http' ? info : false;
-});
-const verboseFilter = winston.format((info, opts) => {
-    return info.level === 'verbose' ? info : false;
-});
-
-const debugFilter = winston.format((info, opts) => {
-    return info.level === 'debug' ? info : false;
-});
-const sillyFilter = winston.format((info, opts) => {
-    return info.level === 'silly' ? info : false;
-});
-
 export const logger = winston.createLogger({
-    level: process.env.LOG_LEVEL_DEV || 'silly',
+    level: process.env.LOG_LEVEL || 'info',
     format: combine(timestamp(), json()),
     transports: [
         new winston.transports.DailyRotateFile({
@@ -70,34 +56,6 @@ export const logger = winston.createLogger({
             datePattern: 'YYYY-MM-DD',
             maxFiles: '14d',
             format: combine(infoFilter(), timestamp(), json()),
-        }),
-        new winston.transports.DailyRotateFile({
-            filename: path.join(logsDirectory, 'app-http-%DATE%.log'),
-            level: 'http',
-            datePattern: 'YYYY-MM-DD',
-            maxFiles: '14d',
-            format: combine(httpFilter(), timestamp(), json()),
-        }),
-        new winston.transports.DailyRotateFile({
-            filename: path.join(logsDirectory, 'app-verbose-%DATE%.log'),
-            level: 'verbose',
-            datePattern: 'YYYY-MM-DD',
-            maxFiles: '14d',
-            format: combine(verboseFilter(), timestamp(), json()),
-        }),
-        new winston.transports.DailyRotateFile({
-            filename: path.join(logsDirectory, 'app-debug-%DATE%.log'),
-            level: 'debug',
-            datePattern: 'YYYY-MM-DD',
-            maxFiles: '14d',
-            format: combine(debugFilter(), timestamp(), json()),
-        }),
-        new winston.transports.DailyRotateFile({
-            filename: path.join(logsDirectory, 'app-silly-%DATE%.log'),
-            level: 'silly',
-            datePattern: 'YYYY-MM-DD',
-            maxFiles: '14d',
-            format: combine(sillyFilter(), timestamp(), json()),
         }),
     ],
     exceptionHandlers: [

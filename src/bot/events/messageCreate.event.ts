@@ -1,4 +1,5 @@
 import { Collection, Message, OmitPartialGroupDMChannel, User } from "discord.js";
+import { logger } from "../../winston/winston";
 
 export async function createMessage(message: OmitPartialGroupDMChannel<Message<boolean>>) {
   try {
@@ -13,7 +14,6 @@ export async function createMessage(message: OmitPartialGroupDMChannel<Message<b
     const messageData = {
       username: message.author.globalName,
       messageCreatedAt: message.createdTimestamp,
-      content: messageWithoutMemberId,
       content: messageWithoutMemberId,
     }
 
