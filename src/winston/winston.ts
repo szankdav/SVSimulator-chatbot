@@ -7,13 +7,7 @@ import { fileURLToPath } from 'url';
 const { combine, timestamp, json, errors } = winston.format;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-let logsDirectory: string;
-if (fs.existsSync("/database")) {
-    logsDirectory = "/database";
-  } else {
-    logsDirectory = path.resolve(__dirname, '../logs');
-  }
+const logsDirectory = path.resolve(__dirname, '../logs');
 
 const errorFilter = winston.format((info, opts) => {
     return info.level === 'error' ? info : false;

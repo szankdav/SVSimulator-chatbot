@@ -133,3 +133,33 @@
 {"level":"info","message":"Discord bot is ready! 🤖","timestamp":"2025-02-18T14:07:29.860Z"}
 {"level":"info","message":"Message logged by user: Szankovszky Dávid","timestamp":"2025-02-18T14:07:48.754Z"}
 {"level":"info","message":"Message logged by user: Szankovszky Dávid","timestamp":"2025-02-18T14:08:00.791Z"}
+{"level":"info","message":"Checking if /database exists:","timestamp":"2025-02-18T15:40:24.591Z"}
+{"level":"info","message":"Using SQLite database at: D:\\Apps\\Viktor\\discord-chatbot\\src\\logger\\database\\DiscordMessages.db","timestamp":"2025-02-18T15:40:24.593Z"}
+{"level":"info","message":"Connected to SQLite database successfully.","timestamp":"2025-02-18T15:40:24.651Z"}
+{"level":"info","message":"Started refreshing application (/) commands.","timestamp":"2025-02-18T15:40:25.224Z"}
+{"level":"info","message":"Successfully reloaded application (/) commands.","timestamp":"2025-02-18T15:40:25.430Z"}
+{"level":"info","message":"Discord bot is ready! 🤖","timestamp":"2025-02-18T15:40:25.430Z"}
+{"level":"info","message":"Checking if /database exists:","timestamp":"2025-02-18T16:16:14.996Z"}
+{"level":"info","message":"Using SQLite database at: D:\\Apps\\Viktor\\discord-chatbot\\src\\logger\\database\\DiscordMessages.db","timestamp":"2025-02-18T16:16:14.998Z"}
+{"level":"info","message":"Connected to SQLite database successfully.","timestamp":"2025-02-18T16:16:15.057Z"}
+{"level":"info","message":"Started refreshing application (/) commands.","timestamp":"2025-02-18T16:16:15.714Z"}
+{"level":"info","message":"Successfully reloaded application (/) commands.","timestamp":"2025-02-18T16:16:15.956Z"}
+{"level":"info","message":"Discord bot is ready! 🤖","timestamp":"2025-02-18T16:16:15.956Z"}
+{"level":"info","message":"Author added to the database!","timestamp":"2025-02-18T16:20:04.925Z","username":"Szankovszky Dávid"}
+{"level":"info","message":"Message logged by user: Szankovszky Dávid","timestamp":"2025-02-18T16:20:05.127Z"}
+{"level":"info","message":"Using SQLite database at: D:\\Apps\\Viktor\\discord-chatbot\\src\\logger\\database\\DiscordMessages.db","timestamp":"2025-02-18T17:41:32.881Z"}
+{"level":"info","message":"Connected to SQLite database successfully.","timestamp":"2025-02-18T17:41:32.943Z"}
+{"level":"info","message":"Started refreshing application (/) commands.","timestamp":"2025-02-18T17:41:33.560Z"}
+{"level":"info","message":"Successfully reloaded application (/) commands.","timestamp":"2025-02-18T17:41:33.758Z"}
+{"level":"info","message":"Discord bot is ready! 🤖","timestamp":"2025-02-18T17:41:33.758Z"}
+{"level":"info","message":"Message logged by user: Szankovszky Dávid","timestamp":"2025-02-18T17:41:49.470Z"}
+{"level":"info","message":"Using SQLite database at: D:\\Apps\\Viktor\\discord-chatbot\\src\\logger\\database\\DiscordMessages.db","timestamp":"2025-02-18T17:43:45.218Z"}
+{"level":"info","message":"Connected to SQLite database successfully.","timestamp":"2025-02-18T17:43:45.282Z"}
+{"level":"info","message":"Started refreshing application (/) commands.","timestamp":"2025-02-18T17:43:46.014Z"}
+{"level":"info","message":"Successfully reloaded application (/) commands.","timestamp":"2025-02-18T17:43:46.275Z"}
+{"level":"info","message":"Discord bot is ready! 🤖","timestamp":"2025-02-18T17:43:46.275Z"}
+{"level":"info","message":"Using SQLite database at: D:\\Apps\\Viktor\\discord-chatbot\\src\\logger\\database\\DiscordMessages.db","timestamp":"2025-02-18T18:07:28.561Z"}
+{"level":"info","message":"Connected to SQLite database successfully.","timestamp":"2025-02-18T18:07:28.623Z"}
+{"level":"info","message":"Started refreshing application (/) commands.","timestamp":"2025-02-18T18:07:29.263Z"}
+{"level":"info","message":"Successfully reloaded application (/) commands.","timestamp":"2025-02-18T18:07:29.469Z"}
+{"level":"info","message":"Discord bot is ready! 🤖","timestamp":"2025-02-18T18:07:29.470Z"}

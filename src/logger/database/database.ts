@@ -8,16 +8,7 @@ import { logger } from "../../winston/winston.js";
 // Initialize database
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-let dbFolder: string;
-logger.info("Checking if /database exists:", fs.existsSync("/database"));
-if (fs.existsSync("/database")) {
-    dbFolder = "/database";
-  } else {
-    dbFolder = __dirname
-  }
-
-const dbFilePath = path.join(dbFolder, 'DiscordMessages.db');
+const dbFilePath = path.join(__dirname, 'DiscordMessages.db');
 
 logger.info(`Using SQLite database at: ${dbFilePath}`);
 
