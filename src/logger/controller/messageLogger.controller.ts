@@ -6,6 +6,7 @@ import { SqlParams } from "../types/sqlparams.type.js";
 import { createLetterCounters, getLetterCounterByAuthorId, updateLetterCounter } from "../model/letterCounter.model.js";
 import { LetterCounterError } from "../utils/customErrorClasses/letterCounterError.class.js";
 import { AuthorsError } from "../utils/customErrorClasses/authorsError.class.js";
+import { logger } from "../../winston/winston.js";
 
 export const messageLoggerController = async (db: Database, message: {username: string, messageCreatedAt: number, content: string}): Promise<void> => {
     try {
@@ -14,7 +15,7 @@ export const messageLoggerController = async (db: Database, message: {username: 
         const existingAuthor = await getAuthorByName(db, [message.username]);
         if (!existingAuthor) {
             await createAuthor(db, authorToCreate);
-            console.log('Author added to the database!');
+            logger.info('Author added to the database!', { username: message.username });
         }
 
         const newAuthorId = await getAuthorByName(db, [message.username]);
@@ -29,7 +30,7 @@ export const messageLoggerController = async (db: Database, message: {username: 
         await createMessage(db, [messageToCreate.authorId, messageToCreate.content, messageToCreate.messageCreatedAt]);
         await createLetterCountersInDatabase(db, messageToCreate);
     } catch (error) {
-        console.error("Error logging message:", error);
+        logger.error("Error logging message:", error);
         throw new DatabaseError("Error logging message", 500);
     }
 }
@@ -41,7 +42,7 @@ export const createLetterCountersInDatabase = async (db: Database, messageParams
             await createLetterCounters(db, [messageParams.authorId, "", 0, messageParams.messageCreatedAt, new Date().toLocaleString()]);
         await letterIterator(db, messageParams);
     } catch (error) {
-        console.error("Error creating letters:", error);
+        logger.error("Error creating letters:", error);
         throw new LetterCounterError("Error creating letters", 500);
     }
 };
@@ -50,7 +51,7 @@ export const checkAuthorIdExistense = async (db: Database, params: SqlParams): P
     try {
         return await getLetterCounterByAuthorId(db, params);
     } catch (error) {
-        console.error("Error fetching first author:", error);
+        logger.error("Error fetching first author:", error);
         throw new AuthorsError("Error fetching first author", 500);
     }
 };

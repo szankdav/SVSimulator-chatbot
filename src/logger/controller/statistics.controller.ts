@@ -5,6 +5,7 @@ import { StatisticError } from "../utils/customErrorClasses/statisticError.class
 import { getAllAuthors, getAuthorById } from "../model/author.model.js";
 import { getLetterCountersByAuthorId } from "../model/letterCounter.model.js";
 import { RenderObject } from "../types/renderObject.type.js";
+import { logger } from "../../winston/winston.js";
 
 export const statisticsByAuthorController = async (db: Database, params: SqlParams): Promise<RenderObject> => {
     try {
@@ -25,7 +26,7 @@ export const statisticsByAuthorController = async (db: Database, params: SqlPara
 
         return renderObject;
     } catch (error) {
-        console.error("Error creating letter statistics renderObject:", error);
+        logger.error("Error creating letter statistics renderObject:", error);
         throw new StatisticError("Error creating letter statistics renderObject:", 500);
     }
 }
@@ -42,7 +43,7 @@ export const getLetterStatictics = async (db: Database, params: SqlParams): Prom
         }
         return letterStatistics;
     } catch (error) {
-        console.error("Error calculating letter statistics:", error);
+        logger.error("Error calculating letter statistics:", error);
         throw new StatisticError("Error calculating letter statistics:", 500);
     }
 }

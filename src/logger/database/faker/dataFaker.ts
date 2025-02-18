@@ -2,6 +2,7 @@ import { fakerHU } from '@faker-js/faker';
 import { Database } from 'sqlite3';
 import { execute, fetchAll } from "../database.js";
 import { db } from "../database.js";
+import { logger } from '../../../winston/winston.js';
 
 const createFakeAuthors = (): string[] => {
     const fakeAuthors: string[] = [];
@@ -82,12 +83,11 @@ const fillDatabaseWithFakeData = async (db: Database): Promise<void> => {
         await insertMessages(db, authors, letterCountMap);
         await updateLetterCounters(db, letterCountMap);
     } catch (error) {
-        console.error(error);
+        logger.error(error);
     }
 };
 
 export const runFaker = async () => {
+    logger.info("Database filled with fake data.");
     await fillDatabaseWithFakeData(db);
 } 
-
-// "devDb": "NODE_ENV=devDb tsx watch src/index.ts",

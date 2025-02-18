@@ -1,10 +1,11 @@
 import { Collection, Message, OmitPartialGroupDMChannel, User } from "discord.js";
+import { logger } from "../../winston/winston.js";
 
 export async function createMessage(message: OmitPartialGroupDMChannel<Message<boolean>>) {
   try {
     if (message.author.bot) return;
     if (message.content.startsWith('<@')) return;
-    let messageWithoutMemberId :string = message.content;
+    let messageWithoutMemberId: string = message.content;
     const mentionedUsers: Collection<string, User> = message.mentions.users;
     for (const user of mentionedUsers) {
       messageWithoutMemberId = messageWithoutMemberId.replace(`<@${user[0]}>`, user[1].username);
@@ -24,10 +25,11 @@ export async function createMessage(message: OmitPartialGroupDMChannel<Message<b
       body: JSON.stringify({ message: messageData }),
     })
 
-    const response = await result.json();
-    console.log(response);
+    if (result.status === 200) {
+      logger.info(`Message logged by user: ${message.author.globalName}`)
+    }
   } catch (error) {
-    console.error("Error creating message:", error);
+    logger.error("Error creating message:", error);
   }
 }
 
@@ -40,5 +42,6 @@ export async function answerBotMention(message: OmitPartialGroupDMChannel<Messag
   if (user.username === "SVSimulator Sven") {
     message.channel.send(`Szia ${message.author}!`);
     message.channel.send(`Az elérhető parancsaimat a "/" jellel tudod előhozni! :)`);
+    logger.info(`SVSimulator Sven mentioned by: ${message.author}`);
   }
 }

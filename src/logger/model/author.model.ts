@@ -1,6 +1,7 @@
 import { Database } from "sqlite3";
 import { execute, fetchAll, fetchFirst } from "../database/database.js";
 import { SqlParams } from "../types/sqlparams.type.js";
+import { logger } from "../../winston/winston.js";
 
 export type AuthorModel = {
     id: number;
@@ -13,7 +14,7 @@ export const createAuthor = async (db: Database, params: SqlParams): Promise<voi
     try {
         await execute(db, sql, params);
     } catch (error) {
-        console.error("Error creating author:", error);
+        logger.error("Error creating author:", error);
         throw new Error("Error creating author");
     }
 };
@@ -29,7 +30,7 @@ export const getAllAuthors = async (db: Database): Promise<AuthorModel[]> => {
             createdAt: row.createdAt,
         }));
     } catch (error) {
-        console.error("Error fetching all authors:", error);
+        logger.error("Error fetching all authors:", error);
         throw new Error("Error fetching all authors");
     }
 };
@@ -39,7 +40,7 @@ export const getAuthorByName = async (db: Database, params: SqlParams): Promise<
     try {
         return await fetchFirst<{ id: number; name: string; createdAt: string }>(db, sql, params);
     } catch (error) {
-        console.error("Error fetching author:", error);
+        logger.error("Error fetching author:", error);
         throw new Error("Error fetching author");
     }
 }
@@ -49,7 +50,7 @@ export const getAuthorById = async(db: Database, params: SqlParams): Promise<Aut
     try {
         return await fetchFirst<{ id: number; name: string; createdAt: string }>(db, sql, params);
     } catch (error) {
-        console.error("Error fetching author:", error);
+        logger.error("Error fetching author:", error);
         throw new Error("Error fetching author");
     }
 }
@@ -65,7 +66,7 @@ export const getTenAuthors = async (db: Database, params: SqlParams): Promise<Au
             createdAt: row.createdAt,
         }))
     } catch (error) {
-        console.error("Error fetching ten authors:", error);
+        logger.error("Error fetching ten authors:", error);
         throw new Error("Error fetching ten authors");
     }
 }
@@ -75,8 +76,9 @@ export const deleteAllAuthors = async (db: Database): Promise<void> => {
     const sql = `DELETE FROM Authors`;
     try {
         const rows = await execute(db, sql);
+        logger.info("Database ereased.");
     } catch (error) {
-        console.error("Error deleting authors:", error);
+        logger.error("Error deleting authors:", error);
         throw new Error("Error deleting authors");
     }
 }
