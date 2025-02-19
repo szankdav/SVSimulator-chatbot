@@ -33,6 +33,8 @@ After building, start the compiled program with:
 
     npm run start
 
+# Tests
+
 The program includes functional Playwright tests to ensure the UI operates correctly.
 To test the UI functions, after build, start the program and run:
 
@@ -41,8 +43,6 @@ To test the UI functions, after build, start the program and run:
 This command populates the database with generated data, which is used for the Playwright tests.
 After successful execution, the generated data is deleted from the database.
 
-## SliDev
-A presentation has been created for the project.
-To view it, navigate to the /discord-bot-logger folder and run:
+# Docs
 
-    npm run dev
+You can find the documentation in the docs folder! 
