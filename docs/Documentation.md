@@ -226,21 +226,27 @@ Root Folder:
 * **/tests**: Contains Playwright tests.
 
 **/src** Folder Structure
+
 ![](https://i.ibb.co/cSh27Vqk/srcfolder.jpg)
+
 * **/bot**: Folder for the discord bot.
 * **/logger**: Folder for the logging logic.
 * **/scripts**: Folder for reusable scripts.
 * **/winston**: Folder of the winston logger.
 
 **/bot** Folder Structure
+
 ![](https://i.ibb.co/rRv8x1V0/botfolder.jpg)
+
 * **/client**: Bot initialization files.
 * **/commands/utility**: Slash commands for the bot.
 * **/events**: Events the bot listens to.
 * **/interactions**: Bot interactions.
 
 **/logger** Folder Structure
+
 ![](https://i.ibb.co/pBdPNdL7/loggerfolder.jpg)
+
 * **/controller**: Controllers.
 * **/database**: Database-related files.
 * **/database/faker**: Faker.js-based fake data generator.
