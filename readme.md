@@ -41,8 +41,5 @@ To test the UI functions, after build, start the program and run:
 This command populates the database with generated data, which is used for the Playwright tests.
 After successful execution, the generated data is deleted from the database.
 
-## SliDev
-A presentation has been created for the project.
-To view it, navigate to the /discord-bot-logger folder and run:
-
-    npm run dev
+# Docs
+You can find the documentation in the docs folder! 
