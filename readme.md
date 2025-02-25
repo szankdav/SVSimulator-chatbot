@@ -47,3 +47,4 @@ You can find the documentation in the docs folder!
 # Usage
 Feel free to use this app for your own purposes!
 After completing the necessary steps in discord.js, add your bots to your server and use this program as a base!
+More information: https://discordjs.guide/preparations/setting-up-a-bot-application.html
