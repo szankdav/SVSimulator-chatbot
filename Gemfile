@@ -7,7 +7,11 @@ source "https://rubygems.org"
 #
 # This will help ensure the proper Jekyll version is running.
 # Happy Jekylling!
+<<<<<<< HEAD
 # gem "jekyll", "~> 4.4.1"
+=======
+#gem "jekyll", "~> 4.4.1"
+>>>>>>> dd8fdd3 (site created with jekyll)
 # This is the default theme for new Jekyll sites. You may change this to anything you like.
 gem "minima", "~> 2.5"
 # If you want to use GitHub Pages, remove the "gem "jekyll"" above and
