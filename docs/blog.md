@@ -408,12 +408,13 @@ Hogy megkönnyítsem a rendereléshez szükséges paraméterek átadását, lét
 
     <%- include('core/navbar'); %> 
     <div class="container mt-3"> 
-	    <%if(error === ""){%> 
+	    <%if(error === ""){%>
 		    <div class="row"> 
 			    <div class="col-12"> 
 				    <h4>Here you can see the who sent a message on your server. If you want to see the messages for an author, click on an author!</h4> 
 				</div> 
 			</div> 
+		<% } %>
 		<div class="row mt-3"> 
 			<div class="col-12 d-grid gap-2 d-md-block"> 
 				<a id="previousButton" class="btn btn-success">Previous</a> 
