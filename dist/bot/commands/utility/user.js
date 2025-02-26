@@ -1,0 +1,14 @@
+var __defProp = Object.defineProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+import { SlashCommandBuilder } from "discord.js";
+import { logger } from "../../../winston/winston.js";
+const data = new SlashCommandBuilder().setName("user").setDescription("Provides information about the user.");
+async function execute(interaction) {
+  logger.info(`Interaction: ${interaction.commandName} used by user: ${interaction.user.globalName}`);
+  return interaction.reply(`This command was run by ${interaction.user}`);
+}
+__name(execute, "execute");
+export {
+  data,
+  execute
+};

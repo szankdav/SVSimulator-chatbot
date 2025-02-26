@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "D:\\Apps\\Viktor\\discord-chatbot\\dist\\logs\\.1258c96a1fe0f80dee764e2795f71b9c080e1c45-audit.json",
+    "files": [
+        {
+            "date": 1740571122309,
+            "name": "D:\\Apps\\Viktor\\discord-chatbot\\dist\\logs\\app-warn-2025-02-26.log",
+            "hash": "1d7f0a5055a05adb8ab9c157f24967fd9b77087d3982097e03148638eb984547"
+        }
+    ],
+    "hashType": "sha256"
+}

@@ -1,0 +1,5 @@
+{"level":"info","message":"Using SQLite database at: D:\\Apps\\Viktor\\discord-chatbot\\dist\\logger\\database\\DiscordMessages.db","timestamp":"2025-02-26T12:05:03.659Z"}
+{"level":"info","message":"Connected to SQLite database successfully.","timestamp":"2025-02-26T12:05:03.721Z"}
+{"level":"info","message":"Started refreshing application (/) commands.","timestamp":"2025-02-26T12:05:04.279Z"}
+{"level":"info","message":"Successfully reloaded application (/) commands.","timestamp":"2025-02-26T12:05:04.452Z"}
+{"level":"info","message":"Discord bot is ready! 🤖","timestamp":"2025-02-26T12:05:04.452Z"}
