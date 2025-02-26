@@ -576,7 +576,7 @@ Ez garantálja, hogy a teszt előtt legyenek adatok, majd a teszt után törlőd
     - name: Run Playwright tests
     run: npm run playwright-prod
     - uses: actions/upload-artifact@v4
-    if: ${{ !cancelled() }}
+    if: ${{ cancelled() === false }}
     with:
     name: playwright-report
     path: playwright-report/
