@@ -22,7 +22,7 @@ title: Discord bot blog oldal
 email: szankovszky.david@gmail.com
 description: # this means to ignore newlines until "baseurl:"
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "/blog" # the base hostname & protocol for your site, e.g. http://example.com
+url: "/SVSimulator-chatbot" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  szankdav
 
 # Build settings
