@@ -404,46 +404,6 @@ Hogy megkönnyítsem a rendereléshez szükséges paraméterek átadását, lét
     app.set("view engine", "ejs"); 
     app.set("views", path.join(__dirname, 'logger/view'));
     
-**Az authors view fájl body felépítése**
-
-    <%- include('core/navbar'); %> 
-    <div class="container mt-3"> 
-	    <%if(error === ""){%>
-		    <div class="row"> 
-			    <div class="col-12"> 
-				    <h4>Here you can see the who sent a message on your server. If you want to see the messages for an author, click on an author!</h4> 
-				</div> 
-			</div> 
-		<% } %>
-		<div class="row mt-3"> 
-			<div class="col-12 d-grid gap-2 d-md-block"> 
-				<a id="previousButton" class="btn btn-success">Previous</a> 
-				<a id="firstPageNumberButton" class="btn btn-success"></a> 
-				<a id="secondPageNumberButton" class="btn btn-success"></a> 
-				<a id="thirdPageNumberButton" class="btn btn-success"></a> 
-				<a id="nextButton" data-maxpages="<%= authorsPageNumber %>" class="btn btn-success">Next</a> 
-			</div> 
-			<div class="col-12 mt-3"> 
-				<table class="table table-striped"> 
-					<thead> 
-						<tr> 
-							<th>ID</th> 
-							<th>Name</th> 
-							<th>Created</th> 
-						</tr> 
-					</thead>
-					<tbody> 
-						<% authorsSlicedByTen.forEach(row=> { %> 
-							<tr class="authorRow" data-id="<%= row.id %>"> 
-								<td> <%= row.id %> </td> 
-								<td> <%= row.name %> </td> 
-								<td> <%= row.createdAt %> </td> 
-							</tr> <% }) %> 
-					</tbody> 
-				</table> 
-			</div> 
-		</div>
-    
 Ezt a **.ejs** kiterjesztésű fájlt fogja a renderelés során a program egy html fájlá alakítva elküldeni a kliensnek, ahol a böngésző már meg tudja jeleníteni! Ekkor a programot futtatva, és a böngészőben a beállított portot meglátogatva látni fogjuk az adatbázisban található adatokat táblázatos formában! 
 
 ![enter image description here](https://i.ibb.co/jvC197C4/author.jpg)
