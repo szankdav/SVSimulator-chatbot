@@ -18,16 +18,9 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-<<<<<<< HEAD
 title: Discord bot blog oldal
 email: szankovszky.david@gmail.com
 description: # this means to ignore newlines until "baseurl:"
-=======
-title: Hogyan naplózzunk üzeneteket discordon bot segítségével?
-email: szankovszky.david@gmail.com
-description: >- # this means to ignore newlines until "baseurl:"
-  Nézd meg, hogyan léptem meg ezt a feladatot!
->>>>>>> dd8fdd3 (site created with jekyll)
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "/blog" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  szankdav
